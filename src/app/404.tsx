@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import { Noto_Sans, Poppins } from "next/font/google";
 import Link from "next/link";
 import React from "react";
@@ -29,7 +28,9 @@ const Error = () => {
           >
             Page Not Found
           </p>
-          <p className={`${noto.className} text-[13px] text-center text-[#222222] my-8`}>
+          <p
+            className={`${noto.className} text-[13px] text-center text-[#222222] my-8`}
+          >
             Sorry, the page you are looking for could not be found.
           </p>
           <div className="mx-auto max-w-[100px]">
@@ -43,15 +44,9 @@ const Error = () => {
             </Link>
           </div>
         </div>
-
-        {/* Wrapped About and Newsletter inside Suspense */}
         <aside className="lg:w-3/12">
-          <Suspense fallback={<div>Loading About...</div>}>
-            <About />
-          </Suspense>
-          <Suspense fallback={<div>Loading Newsletter...</div>}>
-            <Newsletter />
-          </Suspense>
+          <About />
+          <Newsletter />
         </aside>
       </div>
     </main>
