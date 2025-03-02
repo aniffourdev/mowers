@@ -4,7 +4,6 @@ import {
   generateMetadata as generateContentMetadata,
 } from "@/utils/functions";
 import DynamicPageClient from "./DynamicPageClient";
-import Error from "@/app/components/Error";
 
 interface PageProps {
   params: Promise<{
@@ -17,7 +16,7 @@ const DynamicPage = async ({ params }: PageProps) => {
   const content = await fetchContent(slug);
 
   if (!content) {
-    return <Error />;
+    return <>Not Found!!</>;
   }
 
   return <DynamicPageClient content={content} />;

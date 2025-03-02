@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { generateSchemaMarkup } from "@/utils/functions";
-import Error from "@/app/components/Error";
 import Post from "@/app/components/sections/dynamic/contents/Post";
 import Tag from "@/app/components/sections/dynamic/contents/Tag";
 import Category from "@/app/components/sections/dynamic/contents/Category";
@@ -22,7 +21,7 @@ const DynamicPageClient: React.FC<DynamicPageClientProps> = ({ content }) => {
   }, [content]);
 
   if (error) {
-    return <Error />;
+    return <>Not Found!</>;
   }
 
   const schemaMarkup = generateSchemaMarkup(content);
