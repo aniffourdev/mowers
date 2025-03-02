@@ -6,6 +6,7 @@ import Post from "@/app/components/sections/dynamic/contents/Post";
 import Tag from "@/app/components/sections/dynamic/contents/Tag";
 import Category from "@/app/components/sections/dynamic/contents/Category";
 import Page from "@/app/components/sections/dynamic/contents/Page";
+import Author from "@/app/components/sections/dynamic/contents/Author";
 
 interface DynamicPageClientProps {
   content: any;
@@ -39,6 +40,9 @@ const DynamicPageClient: React.FC<DynamicPageClientProps> = ({ content }) => {
       break;
     case "page":
       contentComponent = <Page content={content} />;
+      break;
+    case "user":
+      contentComponent = <Author content={content} />;
       break;
     default:
       contentComponent = <div>Unknown Content Type</div>;

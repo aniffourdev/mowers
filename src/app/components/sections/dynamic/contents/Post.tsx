@@ -1,14 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaFacebookF, FaTwitter, FaPlus, FaMinus } from "react-icons/fa";
 import { BsPinterest } from "react-icons/bs";
 import { Lato, Noto_Sans, Poppins } from "next/font/google";
 import parse, { DOMNode, Element } from "html-react-parser";
 import About from "@/app/components/widgets/About";
-import RecentPosts from "@/app/components/widgets/RecentPosts";
 import Newsletter from "@/app/components/sections/static/Newsletter";
+import { fetchSocialLinks } from "@/api/rest/fetchFunctions";
+import { SocialLinks } from "@/libs/interfaces";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import Link from "next/link";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -35,6 +38,7 @@ interface PostProps {
     author: {
       node: {
         name: string;
+        slug: string;
         description: string;
         avatar: {
           url: string;
@@ -124,7 +128,57 @@ const replaceLinks = (content: string) => {
   });
 };
 
+const socialMediaIcons = [
+  {
+    name: "Facebook",
+    icon: FaFacebookF,
+    link: "https://www.facebook.com",
+  },
+  {
+    name: "Twitter",
+    icon: FaTwitter,
+    link: "https://www.twitter.com",
+  },
+  {
+    name: "Pinterest",
+    icon: BsPinterest,
+    link: "https://www.pinterest.com",
+  },
+];
+
 const Post: React.FC<PostProps> = ({ post }) => {
+  const [socialLinks, setSocialLinks] = useState<SocialLinks | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getSocialLinks = async () => {
+      try {
+        const fetchedSocialLinks = await fetchSocialLinks();
+        setSocialLinks(fetchedSocialLinks);
+      } catch (error) {
+        console.error("Error fetching social links:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSocialLinks();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center gap-3">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton key={index} width={20} height={20} />
+        ))}
+      </div>
+    );
+  }
+
+  if (!socialLinks) {
+    return null; // Ensure socialLinks are available before rendering
+  }
+
   if (!post) {
     return <div>Post not found</div>;
   }
@@ -340,18 +394,26 @@ const MainContent = ({
           <div
             className={`${poppins.className} text-center md:text-left text-sm flex-col space-y-2.5`}
           >
-            <div className="text-black font-medium">
+            <Link
+              href={`/${post.author?.node.slug}`}
+              className="text-black font-medium"
+            >
               {post.author?.node.name}
-            </div>
-            <p className={`${noto.className} text-black text-xs`}>
-              {post.author?.node.description}
+            </Link>
+            <p className={`${noto.className} text-black text-xs mt-2`}>
+              {post.author?.node?.description
+                ? parse(post.author.node.description)
+                : "No author description available."}
             </p>
             <nav>
-              <ul className="flex justify-start items-center gap-3">
-                <li>FB</li>
-                <li>IG</li>
-                <li>PN</li>
-                <li>SP</li>
+              <ul className="flex mt-5 justify-center lg:justify-start items-center gap-3">
+                {socialMediaIcons.map(({ name, icon: Icon, link }) => (
+                  <li key={name}>
+                    <Link target="_blank" href={link || "/"} aria-label={name}>
+                      <Icon className="size-4 text-[#222222]" />
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
           </div>
@@ -367,7 +429,6 @@ const MainContent = ({
       </h5>
     </div>
 
-
     <div className="my-16">
       <h5
         className={`${lato.className} !text-[12px] !uppercase !text-center !tracking-widest !text-[#222] !mt-0 !mb-4`}
@@ -375,8 +436,6 @@ const MainContent = ({
         Leave A Comment
       </h5>
     </div>
-
-
   </article>
 );
 

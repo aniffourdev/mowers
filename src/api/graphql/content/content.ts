@@ -30,6 +30,11 @@ export async function getAllSlugs() {
             slug
           }
         }
+        users {
+          nodes {
+            slug
+          }
+        }
       }
     `,
   });
@@ -109,8 +114,17 @@ export async function getContentBySlug(slug: string) {
           author {
             node {
               name
+              slug
+              description
               avatar {
                 url
+              }
+              seo {
+                social {
+                  facebook
+                  instagram
+                  pinterest
+                }
               }
             }
           }
@@ -138,6 +152,48 @@ export async function getContentBySlug(slug: string) {
             nodes {
               name
               slug
+            }
+          }
+        }
+
+        user(id: $slug, idType: SLUG) {
+          id
+          name
+          slug
+          description
+          posts(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
+            nodes {
+              title
+              slug
+              categories {
+                nodes {
+                  name
+                  slug
+                }
+              }
+              content
+              date
+              seo {
+                readingTime
+                metaDesc
+                opengraphPublishedTime
+              }
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                }
+              }
+            }
+          }
+          avatar {
+            url
+          }
+          seo {
+            social {
+              facebook
+              instagram
+              pinterest
             }
           }
         }
@@ -181,6 +237,7 @@ export async function getContentBySlug(slug: string) {
   if (data.page) return { ...data.page, type: "page" };
   if (data.post) return { ...data.post, type: "post" };
   if (data.tag) return { ...data.tag, type: "tag" }; // Return tag data
+  if (data.user) return { ...data.user, type: "user" }; // Return tag data
 
   return null;
 }

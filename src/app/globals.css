@@ -6,6 +6,15 @@
   }
 }
 
+#nprogress .bar {
+  background: #000000 !important; /* Change the color */
+  height: 3.5px !important; /* Change the height */
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 0px #000000, 0 0 0px #000000 !important; /* Add a shadow */
+}
+
 .animated-underline {
   position: relative;
 }
