@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/app/components/global/header/Navbar";
 import Footer from "@/app/components/global/footer/Footer";
 import { MyProvider } from "@/context/DynamicContext";
-import ProgressBar from "@/app/ProgressBar"; // Import the ProgressBar
+// import ProgressBar from "@/app/ProgressBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <MyProvider>
-          <ProgressBar /> {/* Add the ProgressBar here */}
+          {/* <ProgressBar /> */}
           <Navbar />
           {children}
           <Footer />
