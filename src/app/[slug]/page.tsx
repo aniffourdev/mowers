@@ -1,4 +1,4 @@
-// src/app/[slug]/page.tsx (Server Component)
+import { notFound } from 'next/navigation'
 import {
   fetchContent,
   generateMetadata as generateContentMetadata,
@@ -16,7 +16,7 @@ const DynamicPage = async ({ params }: PageProps) => {
   const content = await fetchContent(slug);
 
   if (!content) {
-    return <>Not Found!!</>;
+    notFound()
   }
 
   return <DynamicPageClient content={content} />;

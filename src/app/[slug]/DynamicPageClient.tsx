@@ -6,6 +6,8 @@ import Tag from "@/app/components/sections/dynamic/contents/Tag";
 import Category from "@/app/components/sections/dynamic/contents/Category";
 import Page from "@/app/components/sections/dynamic/contents/Page";
 import Author from "@/app/components/sections/dynamic/contents/Author";
+import { notFound } from 'next/navigation'
+import NotFound from "../components/NotFound";
 
 interface DynamicPageClientProps {
   content: any;
@@ -21,7 +23,7 @@ const DynamicPageClient: React.FC<DynamicPageClientProps> = ({ content }) => {
   }, [content]);
 
   if (error) {
-    return <>Not Found!</>;
+    notFound()
   }
 
   const schemaMarkup = generateSchemaMarkup(content);
@@ -44,7 +46,7 @@ const DynamicPageClient: React.FC<DynamicPageClientProps> = ({ content }) => {
       contentComponent = <Author content={content} />;
       break;
     default:
-      contentComponent = <div>Unknown Content Type</div>;
+      contentComponent = <NotFound />;
   }
 
   return (
