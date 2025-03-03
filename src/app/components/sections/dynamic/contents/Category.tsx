@@ -15,12 +15,18 @@ interface Post {
   title: string;
   slug: string;
   content: string;
+  categories: {
+    nodes: {
+      name: string;
+      slug: string;
+    }[];
+  };
   date: string;
   seo: {
     metaDesc: string;
     title: string;
-    opengraphPublishedTime?: string; // Make this optional
-    opengraphModifiedTime?: string; // Make this optional
+    opengraphPublishedTime: string;
+    opengraphModifiedTime: string;
   };
   featuredImage: {
     node: {
@@ -107,7 +113,14 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
                     />
                   </Link>
                 </figure>
-                <h3 className={`!text-black !text-sm !uppercase`}>{post.title}</h3>
+                <Link
+                  href={`/${post.slug}`}
+                  aria-label={`View post: ${post.title}`}
+                >
+                  <h3 className={`!text-black !text-sm !uppercase`}>
+                    {post.title}
+                  </h3>
+                </Link>
                 <div className="flex justify-start items-center gap-4 mb-3.5 mt-2">
                   <Link
                     href={`/${content.slug}`}
@@ -116,12 +129,16 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
                     {content.name}
                   </Link>
                   <time
-                    dateTime={post.seo.opengraphPublishedTime || ""}
-                    className="text-[#222] text-xs uppercase"
+                    dateTime={post.seo.opengraphPublishedTime}
+                    className="text-[#222] text-xs capitalize"
                   >
-                    {post.seo.opengraphPublishedTime
-                      ? formatDate(post.seo.opengraphPublishedTime)
-                      : "Date Unavailable"}
+                    {new Date(
+                      post.seo.opengraphPublishedTime
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </time>
                 </div>
                 <p className="text-slate-700 text-xs">

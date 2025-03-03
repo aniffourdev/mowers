@@ -21,7 +21,6 @@ interface Post {
 export async function fetchContent(slugprops: string) {
   let content = await getContentBySlug(slugprops);
 
-
   const { slug } = content;
 
   if (content) {
@@ -123,7 +122,9 @@ export function generateSchemaMarkup(content: any) {
  * @param params - The params object containing the slug.
  * @returns Metadata for the page.
  */
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params; // Unwrap the params Promise
   const content = await fetchContent(slug);
 
@@ -134,7 +135,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const description = content.description || (content.content ? content.content.substring(0, 160) : "");
+  const description =
+    content.description ||
+    (content.content ? content.content.substring(0, 160) : "");
   const canonicalUrl = `https://www.${process.env.NEXT_PUBLIC_FRONTEND}/${slug}`;
 
   switch (content.type) {
@@ -217,14 +220,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       };
     case "tag":
       return {
-        title: content.title,
-        description: content.seo?.metaDesc || description,
+        title: content.name, // Use content.name for tag title
+        description: content.description || "Posts tagged with " + content.name,
         robots: {
-          index: true,
-          follow: true,
+          index: false, // Set to false for noindex
+          follow: false, // Set to false for nofollow
           googleBot: {
-            index: true,
-            follow: true,
+            index: false, // Set to false for noindex
+            follow: false, // Set to false for nofollow
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
+        alternates: {
+          canonical: canonicalUrl,
+        },
+      };
+    case "user":
+      return {
+        title: content.name, // Use content.name for author title
+        description: content.description || "Posts by " + content.name,
+        robots: {
+          index: false, // Set to false for noindex
+          follow: false, // Set to false for nofollow
+          googleBot: {
+            index: false, // Set to false for noindex
+            follow: false, // Set to false for nofollow
             "max-video-preview": -1,
             "max-image-preview": "large",
             "max-snippet": -1,

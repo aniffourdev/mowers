@@ -1,8 +1,5 @@
-import { notFound } from 'next/navigation'
-import {
-  fetchContent,
-  generateMetadata as generateContentMetadata,
-} from "@/utils/functions";
+import { notFound } from 'next/navigation';
+import { fetchContent, generateMetadata as generateContentMetadata } from "@/utils/functions";
 import DynamicPageClient from "./DynamicPageClient";
 
 interface PageProps {
@@ -16,7 +13,7 @@ const DynamicPage = async ({ params }: PageProps) => {
   const content = await fetchContent(slug);
 
   if (!content) {
-    notFound()
+    notFound();
   }
 
   return <DynamicPageClient content={content} />;

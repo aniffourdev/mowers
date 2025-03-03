@@ -12,6 +12,7 @@ import { SocialLinks } from "@/libs/interfaces";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -212,11 +213,20 @@ const TableOfContents = ({
     setIsOpen(!isOpen);
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <nav className="bg-slate-100 p-5 mb-8">
-      <div
-        className="flex justify-between items-center cursor-pointer"
+    <nav className="bg-slate-100 p-5 mb-8" aria-label="Table of Contents">
+      <button
+        className="flex justify-between items-center w-full cursor-pointer"
         onClick={toggleToc}
+        aria-expanded={isOpen}
+        aria-controls="toc-content"
       >
         <h2 className="!font-semibold !text-lg !text-black !uppercase !mb-0">
           See What&apos;s Inside
@@ -226,26 +236,42 @@ const TableOfContents = ({
         ) : (
           <FaPlus className="text-black" />
         )}
-      </div>
-      {isOpen && (
-        <div className="mt-4 space-y-2">
-          <ul>
-            {toc.map((item) => (
-              <li
-                key={item.id}
-                className={`pb-2 ${item.level === 3 ? "ml-4" : ""}`}
-              >
-                <Link
-                  href={`#${item.id}`}
-                  className="toc-link text-slate-700 font-semibold text-[13px] transition-all hover:text-slate-950"
+      </button>
+      <motion.div
+        initial={false}
+        animate={isOpen ? "open" : "closed"}
+        variants={{
+          open: { height: "auto" },
+          closed: { height: 0 },
+        }}
+        transition={{ duration: 0.3 }}
+        className="overflow-hidden"
+        id="toc-content"
+      >
+        {isOpen && (
+          <div className="mt-4 space-y-2">
+            <ul>
+              {toc.map((item) => (
+                <li
+                  key={item.id}
+                  className={`pb-2 ${item.level === 3 ? "ml-4" : ""}`}
                 >
-                  {item.text}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+                  <Link
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(item.id);
+                    }}
+                    className="toc-link text-slate-700 font-semibold text-[13px] transition-all hover:text-slate-950"
+                  >
+                    {item.text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </motion.div>
     </nav>
   );
 };
@@ -293,6 +319,7 @@ const MainContent = ({
           <div
             className="h-11 w-11 bg-slate-200 rounded-full bg-cover bg-center"
             style={{ backgroundImage: `url(${post.author.node.avatar.url})` }}
+            aria-label={`Avatar of ${post.author.node.name}`}
           ></div>
         )}
         <div className="flex justify-center items-start flex-col space-y-1">
@@ -325,7 +352,7 @@ const MainContent = ({
       <div
         className={`${noto.className} single_content text-[#222] text-[14px] tracking-[.2px] leading-[1.5] mb-8`}
       >
-        {replaceLinks(post.content)}
+        {replaceLinks(modifiedContent)}
       </div>
     </section>
 
@@ -351,20 +378,44 @@ const MainContent = ({
       >
         Spread the love
       </h6>
-      <nav>
+      <nav aria-label="Social Media Share">
         <ul className="flex justify-start items-center gap-3">
           <li>
-            <Link href="">
+            <Link
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                postUrl
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on Facebook"
+            >
               <FaFacebookF className="text-slate-700 size-4 relative -top-[1px]" />
             </Link>
           </li>
           <li>
-            <Link href="">
+            <Link
+              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                postUrl
+              )}&text=${encodeURIComponent(post.title)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on Twitter"
+            >
               <FaTwitter className="text-slate-700 size-4 relative -top-[1px]" />
             </Link>
           </li>
           <li>
-            <Link href="">
+            <Link
+              href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
+                postUrl
+              )}&media=${encodeURIComponent(
+                post.featuredImage?.node.sourceUrl ||
+                  `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+              )}&description=${encodeURIComponent(post.title)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Share on Pinterest"
+            >
               <BsPinterest className="text-slate-700 size-4 relative -top-[1px]" />
             </Link>
           </li>
@@ -380,16 +431,22 @@ const MainContent = ({
       </h4>
       <div className="border-[1px] border-slate-200 p-5">
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-7">
-          <div className="">
-            <Image
-              src={`${post.author?.node.avatar.url}`}
-              alt={`${post.author?.node.name}`}
-              title={`${post.author?.node.name}`}
-              loading="lazy"
-              width={0}
-              height={0}
-              className="w-20 h-20 rounded-full"
-            />
+          <div className="min-w-max">
+            <Link
+              href={`/${post.author?.node.slug}`}
+              className="text-black font-medium"
+              aria-label={`Link to ${post.author?.node.name}'s profile`}
+            >
+              <Image
+                src={`${post.author?.node.avatar.url}`}
+                alt={`${post.author?.node.name}`}
+                title={`${post.author?.node.name}`}
+                loading="lazy"
+                width={0}
+                height={0}
+                className="w-20 h-20 rounded-full"
+              />
+            </Link>
           </div>
           <div
             className={`${poppins.className} text-center md:text-left text-sm flex-col space-y-2.5`}
@@ -397,6 +454,7 @@ const MainContent = ({
             <Link
               href={`/${post.author?.node.slug}`}
               className="text-black font-medium"
+              aria-label={`Link to ${post.author?.node.name}'s profile`}
             >
               {post.author?.node.name}
             </Link>
@@ -405,11 +463,11 @@ const MainContent = ({
                 ? parse(post.author.node.description)
                 : "No author description available."}
             </p>
-            <nav>
+            <nav aria-label="Author Social Media">
               <ul className="flex mt-5 justify-center lg:justify-start items-center gap-3">
                 {socialMediaIcons.map(({ name, icon: Icon, link }) => (
                   <li key={name}>
-                    <Link target="_blank" href={link || "/"} aria-label={name}>
+                    <Link target="_blank" href={link || "/"} aria-label={`${name} profile`}>
                       <Icon className="size-4 text-[#222222]" />
                     </Link>
                   </li>

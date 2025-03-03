@@ -27,31 +27,26 @@ const RecentPosts = async () => {
       >
         Recent Posts
       </h2>
-      <div className="mb-4">
+      <div className="space-y-3.5">
         {postsWithBlurData.map((post) => (
-          <div
-            key={post.id}
-            className="flex justify-start items-start gap-2.5 mb-2"
-          >
-            <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28">
-              <Image
-                src={
-                  post.featuredImage?.node?.sourceUrl ||
-                  `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
-                }
-                alt={post.title}
-                title={post.featuredImage?.node.title || post.title}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-                width={100}
-                height={0}
-                placeholder="blur"
-                blurDataURL={post.blurData}
-              />
-            </div>
+          <article key={post.slug} className="flex items-center space-x-4">
+            <Image
+              src={
+                post.featuredImage?.node?.sourceUrl ||
+                `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+              }
+              alt={post.title}
+              title={post.featuredImage?.node.title || post.title}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="w-16 h-16"
+              height={50}
+              width={50}
+            />
             <div>
-              <h4 className="!text-black !font-semibold !uppercase !text-[13px] !mb-[-4px] !mt-1">
-                {post.title}
+              <h4 className="!text-black !font-semibold !uppercase !text-xs !mb-[-2px] !mt-0">
+                {post.title.length > 30
+                  ? `${post.title.substring(0, 30)}...`
+                  : post.title}
               </h4>
               <time
                 dateTime={post.seo.opengraphPublishedTime}
@@ -67,7 +62,7 @@ const RecentPosts = async () => {
                 )}
               </time>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </div>

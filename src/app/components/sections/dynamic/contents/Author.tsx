@@ -102,9 +102,14 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
                       />
                     </Link>
                   </figure>
-                  <h3 className={`!text-black !text-sm !uppercase`}>
-                    {post.title}
-                  </h3>
+                  <Link
+                    href={`/${post.slug}`}
+                    aria-label={`View post: ${post.title}`}
+                  >
+                    <h3 className={`!text-black !text-sm !uppercase`}>
+                      {post.title}
+                    </h3>
+                  </Link>
                   <div className="flex justify-start items-center gap-4 mb-3.5 mt-2">
                     {/* Display the first category of the post */}
                     {post.categories.nodes.length > 0 && (
@@ -117,9 +122,15 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
                     )}
                     <time
                       dateTime={post.seo.opengraphPublishedTime}
-                      className="text-[#222] text-xs uppercase"
+                      className="text-[#222] text-xs capitalize"
                     >
-                      {formatDate(post.seo.opengraphPublishedTime)}
+                      {new Date(
+                        post.seo.opengraphPublishedTime
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </time>
                   </div>
                   <p className="text-slate-700 text-xs">

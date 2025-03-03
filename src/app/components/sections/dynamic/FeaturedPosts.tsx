@@ -57,19 +57,23 @@ const FeaturedPosts = async () => {
                         />
                       </Link>
                     </figure>
-                    <h3 className={`!text-black !text-sm !uppercase`}>
-                      {post.title}
+                    <h3
+                      className={`!text-black !text-xs md:!text-sm !uppercase`}
+                    >
+                      {post.title.length > 30
+                        ? `${post.title.substring(0, 30)}...`
+                        : post.title}
                     </h3>
-                    <div className="flex justify-start items-center gap-4 mb-3.5 mt-2">
+                    <div className="flex justify-start items-start md:items-center gap-2 md:gap-4 mb-3.5 mt-2 flex-col md:flex-row">
                       <Link
                         href={`/${post.categories.nodes[0].slug}`}
-                        className={`border-2 border-black px-2 pt-[2.5px] py-0.5 text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
+                        className={`border-2 border-black px-1 md:px-2 pt-[2.5px] py-[1.5px] md:py-0.5 text-[10px] md:text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
                       >
                         {post.categories.nodes[0].name}
                       </Link>
                       <time
                         dateTime={post.seo.opengraphPublishedTime}
-                        className="text-[#222] text-xs uppercase"
+                        className="text-slate-500 text-[10px] md:text-xs uppercase"
                       >
                         {new Date(
                           post.seo.opengraphPublishedTime
@@ -81,7 +85,9 @@ const FeaturedPosts = async () => {
                       </time>
                     </div>
                     <p className="text-slate-700 text-xs">
-                      {post.seo.metaDesc}
+                      {post.seo.metaDesc.length > 70
+                        ? `${post.seo.metaDesc.substring(0, 70)}...`
+                        : post.seo.metaDesc}
                     </p>
                   </article>
                 ))}

@@ -112,7 +112,7 @@ const About = () => {
       </figure>
 
       <nav className="mt-5">
-        <ul className="flex justify-center items-center gap-3">
+        <ul className="flex justify-center items-center gap-1.5">
           {socialMediaIcons.map(({ name, icon: Icon, link, color }) => (
             <li key={name}>
               <Link target="_blank" href={link || "/"} aria-label={name}>
