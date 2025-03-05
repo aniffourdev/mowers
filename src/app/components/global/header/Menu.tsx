@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { getMenuByName, MenuItem } from "@/services/menu";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { Poppins } from "next/font/google";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -68,8 +71,42 @@ const MenuItemComponent = ({ item }: { item: MenuItem }) => {
   );
 };
 
-export default async function Menu() {
-  const menuItems = await getMenuByName("Main");
+export default function Menu() {
+  const [menuItems, setMenuItems] = useState<MenuItem[] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchMenu() {
+      const items = await getMenuByName("Main");
+      if (Array.isArray(items)) {
+        // Check if items is an array
+        setMenuItems(items);
+      } else if (items === null) {
+        // Check if items is null
+        setMenuItems(null);
+      } else {
+        // If items is a string, handle it accordingly
+        console.error("Unexpected response from getMenuByName:", items);
+      }
+      setLoading(false);
+    }
+
+    fetchMenu();
+  }, []);
+
+  if (loading) {
+    return (
+      <nav aria-label="Main Navigation" className="hidden lg:block">
+        <ul className="flex justify-center items-center gap-4">
+          {[...Array(6)].map((_, index) => (
+            <li key={index} className="relative group no-last-gap">
+              <Skeleton width={60} height={15} />
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  }
 
   if (!menuItems || typeof menuItems === "string") {
     return (

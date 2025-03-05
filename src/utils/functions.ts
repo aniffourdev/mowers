@@ -1,11 +1,8 @@
 import { getContentBySlug } from "@/api/graphql/content/content";
 import { Metadata } from "next";
 
-// Define the interface for the props
 interface PageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
 
 interface Post {
@@ -13,14 +10,8 @@ interface Post {
   slug: string;
 }
 
-/**
- * Fetch content by slug.
- * @param slugprops - The slug to fetch content for.
- * @returns The content associated with the slug.
- */
 export async function fetchContent(slugprops: string) {
   let content = await getContentBySlug(slugprops);
-
   const { slug } = content;
 
   if (content) {
@@ -36,11 +27,6 @@ export async function fetchContent(slugprops: string) {
   return content;
 }
 
-/**
- * Generate schema markup based on the content type.
- * @param content - The content for which to generate schema markup.
- * @returns Schema markup as an object.
- */
 export function generateSchemaMarkup(content: any) {
   let schemaMarkup = {};
 
@@ -50,7 +36,7 @@ export function generateSchemaMarkup(content: any) {
         "@context": "https://schema.org",
         "@type": "Article",
         headline: content.title,
-        description: content.seo?.metaDesc || content.description,
+        description: content.seo?.metaDesc || content.seo?.metaDesc,
         image: content.featuredImage?.node?.sourceUrl || "",
         author: {
           "@type": "Person",
@@ -65,28 +51,11 @@ export function generateSchemaMarkup(content: any) {
         "@context": "https://schema.org",
         "@type": "WebPage",
         name: content.title,
-        description: content.description,
+        description: content.seo?.metaDesc || content.seo?.metaDesc,
       };
       break;
     case "category":
     case "subCategory":
-      schemaMarkup = {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        name: content.name,
-        itemListElement: Array.isArray(content.posts)
-          ? content.posts.map((post: Post, index: number) => ({
-              "@type": "ListItem",
-              position: index + 1,
-              item: {
-                "@type": "BlogPosting",
-                name: post.title,
-                url: `/${post.slug}`,
-              },
-            }))
-          : [],
-      };
-      break;
     case "tag":
       schemaMarkup = {
         "@context": "https://schema.org",
@@ -103,6 +72,31 @@ export function generateSchemaMarkup(content: any) {
               },
             }))
           : [],
+      };
+      break;
+    case "faq":
+      schemaMarkup = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: content.faqs.map((faq: any) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      };
+      break;
+    case "video":
+      schemaMarkup = {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: content.title,
+        description: content.seo?.metaDesc || content.seo?.metaDesc,
+        thumbnailUrl: content.thumbnailUrl,
+        uploadDate: content.uploadDate,
+        contentUrl: content.videoUrl,
       };
       break;
     default:
@@ -117,15 +111,8 @@ export function generateSchemaMarkup(content: any) {
   return schemaMarkup;
 }
 
-/**
- * Generate metadata for the page based on the content.
- * @param params - The params object containing the slug.
- * @returns Metadata for the page.
- */
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { slug } = await params; // Unwrap the params Promise
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   const content = await fetchContent(slug);
 
   if (!content) {
@@ -135,134 +122,45 @@ export async function generateMetadata({
     };
   }
 
-  const description =
-    content.description ||
-    (content.content ? content.content.substring(0, 160) : "");
+  const description = content.seo?.metaDesc || "";
   const canonicalUrl = `https://www.${process.env.NEXT_PUBLIC_FRONTEND}/${slug}`;
 
-  switch (content.type) {
-    case "category":
-      return {
-        title: content.name,
-        description,
-        alternates: {
-          canonical: canonicalUrl,
+  return {
+    title: content.seo?.title || content.title,
+    description: content.seo?.metaDesc || "",
+    openGraph: {
+      title: content.seo?.title || content.title,
+      description: content.seo?.metaDesc || "",
+      type: content.type === "post" ? "article" : "website",
+      publishedTime: content.seo?.opengraphPublishedTime,
+      modifiedTime: content.seo?.opengraphModifiedTime,
+      authors: content.author ? [content.author.node.name] : [],
+      images: [
+        {
+          url: content.featuredImage?.node?.sourceUrl || "",
+          alt: content.featuredImage?.node?.altText || "",
         },
-        robots: {
-          index: true,
-          follow: true,
-          googleBot: {
-            index: true,
-            follow: true,
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-          },
-        },
-      };
-    case "page":
-      return {
-        title: content.title,
-        description: content.seo?.metaDesc || description,
-        robots: {
-          index: true,
-          follow: true,
-          googleBot: {
-            index: true,
-            follow: true,
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-          },
-        },
-        alternates: {
-          canonical: canonicalUrl,
-        },
-      };
-    case "post":
-      return {
-        title: content.title,
-        description: content.seo?.metaDesc || description,
-        openGraph: {
-          title: content.seo?.title || content.title,
-          description: content.seo?.metaDesc || description,
-          type: "article",
-          publishedTime: content.seo?.opengraphPublishedTime,
-          modifiedTime: content.seo?.opengraphModifiedTime,
-          authors: [content.author?.node?.name],
-          images: [
-            {
-              url: content.featuredImage?.node?.sourceUrl || "",
-              alt: content.featuredImage?.node?.altText || "",
-            },
-          ],
-        },
-        twitter: {
-          card: "summary_large_image",
-          title: content.seo?.title || content.title,
-          description: content.seo?.metaDesc || description,
-          images: [content.featuredImage?.node?.sourceUrl || ""],
-        },
-        robots: {
-          index: true,
-          follow: true,
-          googleBot: {
-            index: true,
-            follow: true,
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-          },
-        },
-        alternates: {
-          canonical: canonicalUrl,
-        },
-      };
-    case "tag":
-      return {
-        title: content.name, // Use content.name for tag title
-        description: content.description || "Posts tagged with " + content.name,
-        robots: {
-          index: false, // Set to false for noindex
-          follow: false, // Set to false for nofollow
-          googleBot: {
-            index: false, // Set to false for noindex
-            follow: false, // Set to false for nofollow
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-          },
-        },
-        alternates: {
-          canonical: canonicalUrl,
-        },
-      };
-    case "user":
-      return {
-        title: content.name, // Use content.name for author title
-        description: content.description || "Posts by " + content.name,
-        robots: {
-          index: false, // Set to false for noindex
-          follow: false, // Set to false for nofollow
-          googleBot: {
-            index: false, // Set to false for noindex
-            follow: false, // Set to false for nofollow
-            "max-video-preview": -1,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-          },
-        },
-        alternates: {
-          canonical: canonicalUrl,
-        },
-      };
-    default:
-      return {
-        title: "Content",
-        description: "Dynamic content page",
-        alternates: {
-          canonical: canonicalUrl,
-        },
-      };
-  }
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: content.seo?.title || content.title,
+      description: content.seo?.metaDesc || "",
+      images: [content.featuredImage?.node?.sourceUrl || ""],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
 }

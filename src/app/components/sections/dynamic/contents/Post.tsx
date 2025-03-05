@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaFacebookF, FaTwitter, FaPlus, FaMinus } from "react-icons/fa";
@@ -13,6 +12,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import CommentForm from "@/app/components/sections/dynamic/contents/Posts/CommentForm";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -55,6 +55,7 @@ interface PostProps {
     categories: {
       nodes: { name: string; slug: string }[];
     };
+    id: string; // Add the post ID here
   };
 }
 
@@ -183,6 +184,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
   if (!post) {
     return <div>Post not found</div>;
   }
+
+  console.log("Post ID in Post component:", post.id); // Debugging line
 
   const { toc, modifiedContent } = generateTableOfContents(post.content);
   const postUrl = `https://www.${process.env.NEXT_PUBLIC_FRONTEND}/${post.slug}`;
@@ -467,7 +470,11 @@ const MainContent = ({
               <ul className="flex mt-5 justify-center lg:justify-start items-center gap-3">
                 {socialMediaIcons.map(({ name, icon: Icon, link }) => (
                   <li key={name}>
-                    <Link target="_blank" href={link || "/"} aria-label={`${name} profile`}>
+                    <Link
+                      target="_blank"
+                      href={link || "/"}
+                      aria-label={`${name} profile`}
+                    >
                       <Icon className="size-4 text-[#222222]" />
                     </Link>
                   </li>
@@ -479,7 +486,7 @@ const MainContent = ({
       </div>
     </div>
 
-    <div className="my-16">
+    <div className="max-w-screen-md mx-auto my-16">
       <h5
         className={`${lato.className} !text-[12px] !uppercase !text-center !tracking-wide !text-[#222] !mt-0 !mb-4`}
       >
@@ -487,12 +494,8 @@ const MainContent = ({
       </h5>
     </div>
 
-    <div className="my-16">
-      <h5
-        className={`${lato.className} !text-[12px] !uppercase !text-center !tracking-widest !text-[#222] !mt-0 !mb-4`}
-      >
-        Leave A Comment
-      </h5>
+    <div className="max-w-screen-md mx-auto my-16">
+      <CommentForm postId={post.id} />
     </div>
   </article>
 );
