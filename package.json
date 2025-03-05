@@ -21,6 +21,7 @@
     "motion": "^12.4.7",
     "next": "15.2.0",
     "next-nprogress-bar": "^2.4.7",
+    "nodemailer": "^6.10.0",
     "nprogress": "^0.2.0",
     "plaiceholder": "^3.0.0",
     "react": "^19.0.0",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/nprogress": "^0.2.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",

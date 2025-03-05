@@ -1,9 +1,43 @@
+"use client";
 import { Lato } from "next/font/google";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
 
 const Newsletter = () => {
+  const [result, setResult] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+
+  const router = useRouter();
+
+  const sendEmail = () => {
+    setLoading(true);
+
+    fetch("/functions/email", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          // router.push("/thank-u-for-subscribing");
+          alert("Thank you for subscribing!");
+        }
+        return response.json();
+      })
+      .then((data) => setResult(data))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
   return (
     <>
       <div className="mb-12">
@@ -19,8 +53,14 @@ const Newsletter = () => {
             placeholder="Your Email"
             name="email"
             id="email"
+            value={email}
+            onChange={handleInputChange}
           />
-          <button type="button" className="px-4 cursor-pointer py-2 border-2 border-black transition-all duration-200 hover:bg-black hover:text-white mt-3 text-xs">
+          <button
+            onClick={sendEmail}
+            type="button"
+            className="px-4 cursor-pointer py-2 border-2 border-black transition-all duration-200 hover:bg-black hover:text-white mt-3 text-xs"
+          >
             Get Updates
           </button>
         </form>

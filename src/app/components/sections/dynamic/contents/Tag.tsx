@@ -81,7 +81,7 @@ const Tag: React.FC<TagProps> = ({ content }) => {
           <div className="">
             <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-7">
               {content.posts.nodes.map((post) => (
-                <article key={post.slug} className="mb-10">
+                <article key={post.slug} className="mb-6">
                   <figure className="mb-3">
                     <Link
                       href={`/${post.slug}`}
@@ -97,7 +97,6 @@ const Tag: React.FC<TagProps> = ({ content }) => {
                         loading="lazy"
                         width={400}
                         height={280}
-                        objectFit="cover"
                         className="w-full h-auto"
                       />
                     </Link>
@@ -106,23 +105,26 @@ const Tag: React.FC<TagProps> = ({ content }) => {
                     href={`/${post.slug}`}
                     aria-label={`View post: ${post.title}`}
                   >
-                    <h3 className={`!text-black !text-sm !uppercase`}>
-                      {post.title}
+                    <h3
+                      className={`!text-black !text-xs md:!text-sm !uppercase`}
+                    >
+                      {post.title.length > 30
+                        ? `${post.title.substring(0, 30)}...`
+                        : post.title}
                     </h3>
                   </Link>
-                  <div className="flex justify-start items-center gap-4 mb-3.5 mt-2">
-                    {/* Display the first category of the post */}
+                  <div className="flex justify-start items-start md:items-center gap-2 md:gap-4 mb-3.5 mt-2 flex-col md:flex-row">
                     {post.categories.nodes.length > 0 && (
                       <Link
                         href={`/${post.categories.nodes[0].slug}`}
-                        className={`border-2 border-black px-2 pt-[2.5px] py-0.5 text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
+                        className={`border-2 border-black px-1 md:px-2 pt-[2.5px] py-[1.5px] md:py-0.5 text-[10px] md:text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
                       >
                         {post.categories.nodes[0].name}
                       </Link>
                     )}
                     <time
                       dateTime={post.seo.opengraphPublishedTime}
-                      className="text-[#222] text-xs capitalize"
+                      className="text-slate-500 text-[10px] md:text-xs uppercase"
                     >
                       {new Date(
                         post.seo.opengraphPublishedTime
@@ -134,7 +136,9 @@ const Tag: React.FC<TagProps> = ({ content }) => {
                     </time>
                   </div>
                   <p className="text-slate-700 text-xs">
-                    {truncateContent(post.content, 90)}
+                    {post.seo.metaDesc.length > 70
+                      ? `${post.seo.metaDesc.substring(0, 70)}...`
+                      : post.seo.metaDesc}
                   </p>
                 </article>
               ))}

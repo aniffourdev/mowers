@@ -36,7 +36,7 @@ const FeaturedPosts = async () => {
             {postsWithBlurData.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-7">
                 {postsWithBlurData.map((post) => (
-                  <article key={post.id} className="mb-6">
+                  <article key={post.slug} className="mb-6">
                     <figure className="mb-3">
                       <Link
                         href={`/${post.slug}`}
