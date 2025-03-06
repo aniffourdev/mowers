@@ -47,7 +47,7 @@ export async function getAllSlugs() {
   ];
 }
 
-export async function getContentBySlug(slug: string) {
+export async function getContentBySlug(slug: string, page: number, perPage: number) {
   const { data } = await client.query({
     query: gql`
       query GetContentBySlug($slug: ID!) {

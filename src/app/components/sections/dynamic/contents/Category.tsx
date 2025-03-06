@@ -58,6 +58,7 @@ interface CategoryProps {
 }
 
 const Category: React.FC<CategoryProps> = ({ content }) => {
+
   return (
     <main className="max-w-screen-lg mx-auto p-4 my-10">
       <div className="lg:flex gap-10">
@@ -109,7 +110,7 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
                 <div className="flex justify-start items-start md:items-center gap-2 md:gap-4 mb-3.5 mt-2 flex-col md:flex-row">
                   <Link
                     href={`/${content.slug}`}
-                    className={`border-2 border-black px-1 md:px-2 pt-[2.5px] py-[1.5px] md:py-0.5 text-[10px] md:text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
+                    className={`py-0.5 pt-[3px] px-1.5 text-black text-[10px] tracking-[1px] uppercase border-black border-[1px] transition-all hover:text-white hover:bg-black`}
                   >
                     {content.name}
                   </Link>

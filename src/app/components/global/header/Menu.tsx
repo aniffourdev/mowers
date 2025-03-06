@@ -47,9 +47,9 @@ const MenuItemComponent = ({ item }: { item: MenuItem }) => {
       </Link>
       {hasChildItems(item) && (
         <div className="absolute left-0 mt-[0px] hidden group-hover:block z-40 py-3">
-          <ul className={`min-w-max bg-slate-50 rounded py-2 p-4`}>
+          <ul className={`min-w-max bg-slate-50 rounded py-2`}>
             {item.childItems.nodes.map((childItem: MenuItem) => (
-              <li key={childItem.id}>
+              <li key={childItem.id} className="mb-1.5">
                 <Link
                   href={cleanCategoryPath(
                     childItem.path ||
@@ -57,7 +57,7 @@ const MenuItemComponent = ({ item }: { item: MenuItem }) => {
                       childItem.uri ||
                       `/${childItem.label.toLowerCase().replace(/\s+/g, "-")}`
                   )}
-                  className={`${poppins.className} text-black font-normal uppercase text-xs`}
+                  className={`${poppins.className} text-black font-normal uppercase py-4 px-4 text-xs`}
                   aria-label={item.label}
                 >
                   {childItem.label}

@@ -87,7 +87,7 @@ const About = () => {
   return (
     <div className="mb-16">
       <h2
-          className={`!${lato.className} !mb-[1.1em] !pb-[0.3em] !text-xs !tracking-[2px] !uppercase !text-[#222]`}
+          className={`!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest`}
         >
           About me
         </h2>

@@ -117,7 +117,7 @@ const Tag: React.FC<TagProps> = ({ content }) => {
                     {post.categories.nodes.length > 0 && (
                       <Link
                         href={`/${post.categories.nodes[0].slug}`}
-                        className={`border-2 border-black px-1 md:px-2 pt-[2.5px] py-[1.5px] md:py-0.5 text-[10px] md:text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
+                        className={`py-0.5 pt-[3px] px-1.5 text-black text-[10px] tracking-[1px] uppercase border-black border-[1px] transition-all hover:text-white hover:bg-black`}
                       >
                         {post.categories.nodes[0].name}
                       </Link>

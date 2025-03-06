@@ -10,17 +10,17 @@ interface Post {
   slug: string;
 }
 
-export async function fetchContent(slugprops: string) {
-  let content = await getContentBySlug(slugprops);
-  const { slug } = content;
+export async function fetchContent(slug: string, page: number = 1, perPage: number = 10) {
+  let content = await getContentBySlug(slug);
+  const { slug: categorySlug } = content;
 
   if (content) {
-    const parentContent = await getContentBySlug(slug);
+    const parentContent = await getContentBySlug(categorySlug);
     if (parentContent?.type === "category") {
-      const childSlug = slug;
-      content = await getContentBySlug(childSlug);
+      const childSlug = categorySlug;
+      content = await getContentBySlug(childSlug, page, perPage); // Pass page and perPage
       if (content) {
-        content = { ...content, slug, isSubCategory: true };
+        content = { ...content, slug: categorySlug, isSubCategory: true };
       }
     }
   }

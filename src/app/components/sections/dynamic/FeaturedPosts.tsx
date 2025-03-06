@@ -29,7 +29,7 @@ const FeaturedPosts = async () => {
         <div className="lg:flex gap-9">
           <div className="lg:w-9/12">
             <h2
-              className={`!${lato.className} !mb-[1.4em] !pb-[0.3em] !text-center !text-md !tracking-[2px] !uppercase !text-[#ababab]`}
+              className={`!${lato.className} !mb-[1.4em] !pb-[0.3em] !text-center !text-[16px] !tracking-[2px] !uppercase !text-slate-400`}
             >
               Featured Articles
             </h2>
@@ -67,7 +67,7 @@ const FeaturedPosts = async () => {
                     <div className="flex justify-start items-start md:items-center gap-2 md:gap-4 mb-3.5 mt-2 flex-col md:flex-row">
                       <Link
                         href={`/${post.categories.nodes[0].slug}`}
-                        className={`border-2 border-black px-1 md:px-2 pt-[2.5px] py-[1.5px] md:py-0.5 text-[10px] md:text-xs uppercase transition-all duration-300 hover:text-white hover:bg-black`}
+                        className={`py-0.5 pt-[3px] px-1.5 text-black text-[10px] tracking-[1px] uppercase border-black border-[1px] transition-all hover:text-white hover:bg-black`}
                       >
                         {post.categories.nodes[0].name}
                       </Link>
