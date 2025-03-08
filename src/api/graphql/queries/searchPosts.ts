@@ -10,13 +10,26 @@ export const SEARCH_POSTS = gql`
         id
         title
         slug
+        categories {
+          nodes {
+            name
+            slug
+          }
+        }
         date
         excerpt
         featuredImage {
           node {
             sourceUrl
             altText
+            title
           }
+        }
+        seo {
+          metaDesc
+          title
+          opengraphPublishedTime
+          opengraphModifiedTime
         }
       }
     }

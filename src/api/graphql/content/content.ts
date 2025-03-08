@@ -47,7 +47,7 @@ export async function getAllSlugs() {
   ];
 }
 
-export async function getContentBySlug(slug: string, page: number, perPage: number) {
+export async function getContentBySlug(slug: string, page: number = 1, perPage: number = 10) {
   const { data } = await client.query({
     query: gql`
       query GetContentBySlug($slug: ID!) {
@@ -57,6 +57,10 @@ export async function getContentBySlug(slug: string, page: number, perPage: numb
           slug
           categoryImage
           description
+          seo {
+            metaDesc
+            title
+          }
           posts(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
             nodes {
               title
@@ -104,6 +108,10 @@ export async function getContentBySlug(slug: string, page: number, perPage: numb
           title
           content
           slug
+          seo {
+            metaDesc
+            title
+          }
         }
 
         post(id: $slug, idType: SLUG) {

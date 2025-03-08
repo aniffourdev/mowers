@@ -220,3 +220,17 @@ strong {
   text-align: center !important;
   color: #111827 !important;
 }
+
+
+.page-content p{
+  @apply mb-5;
+}
+.page-content h3{
+  @apply mt-5;
+  @apply mb-3;
+  @apply !capitalize;
+  @apply underline;
+}
+.page-content strong{
+  @apply font-semibold;
+}

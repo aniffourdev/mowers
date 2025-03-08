@@ -27,7 +27,7 @@ const Search = () => {
             animate={{ y: "0", marginTop: "61px" }}
             exit={{ y: "-100vh", marginTop: "61px" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-start mt-[61px]"
+            className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-start mt-[61px] overflow-y-auto"
           >
             <SearchComponent onClose={closeSearchPopup} />
           </motion.div>
