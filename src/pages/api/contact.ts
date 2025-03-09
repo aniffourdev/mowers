@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(200).json({ message: 'Email sent successfully!' });
     } catch (error) {
       console.error('Error sending email:', error);
-      res.status(500).json({ message: 'Not Sent!' });
+      res.status(500).json({ message: 'Failed to send email.' });
     }
   } else {
     res.setHeader('Allow', ['POST']);
