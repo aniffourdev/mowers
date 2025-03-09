@@ -167,16 +167,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
     getSocialLinks();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center gap-3">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton key={index} width={20} height={20} />
-        ))}
-      </div>
-    );
-  }
-
   if (!socialLinks) {
     return null; // Ensure socialLinks are available before rendering
   }
@@ -193,12 +183,24 @@ const Post: React.FC<PostProps> = ({ post }) => {
   return (
     <main className="max-w-screen-lg mx-auto p-4 my-16">
       <div className="lg:flex gap-12">
-        <MainContent
-          post={post}
-          modifiedContent={modifiedContent}
-          postUrl={postUrl}
-          toc={toc}
-        />
+        {loading ? (
+          <div className="flex flex-col gap-4">
+            <Skeleton height={40} width="60%" />
+            <Skeleton height={20} width="80%" />
+            <Skeleton height={20} width="70%" />
+            <Skeleton height={20} width="90%" />
+            <Skeleton height={20} width="80%" />
+            <Skeleton height={20} width="70%" />
+            <Skeleton height={20} width="90%" />
+          </div>
+        ) : (
+          <MainContent
+            post={post}
+            modifiedContent={modifiedContent}
+            postUrl={postUrl}
+            toc={toc}
+          />
+        )}
         <Sidebar />
       </div>
     </main>
