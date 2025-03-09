@@ -1,7 +1,6 @@
 // lib/sendMail.ts
 'use server';
 import nodemailer from 'nodemailer';
-import { Liquid } from 'liquid';
 
 const SMTP_SERVER_HOST = process.env.SMTP_SERVER_HOST;
 const SMTP_SERVER_USERNAME = process.env.SMTP_SERVER_USERNAME;
@@ -19,53 +18,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const engine = new Liquid();
-
-const emailTemplate = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Contact Form Submission</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header img { max-width: 150px; }
-        .content { margin-bottom: 20px; }
-        .footer { text-align: center; font-size: 12px; color: #999; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://themes.pixelwars.org/impose/wp-content/uploads/2015/12/impose-logo.png" height="80" width="150" alt="Logo">
-            <h1>New Contact Form Submission</h1>
-        </div>
-        <div class="content">
-            <p><strong>Name:</strong> {{ firstName }} {{ lastName }}</p>
-            <p><strong>Email:</strong> {{ email }}</p>
-            <p><strong>Message:</strong></p>
-            <p>{{ message }}</p>
-        </div>
-        <div class="footer">
-            <p>&copy; 2023 Your Company. All rights reserved.</p>
-        </div>
-    </div>
-</body>
-</html>
-`;
-
 export async function sendMail({
-  firstName,
-  lastName,
   email,
-  message,
+  sendTo,
+  subject,
+  text,
+  html,
 }: {
-  firstName: string;
-  lastName: string;
   email: string;
-  message: string;
+  sendTo?: string;
+  subject: string;
+  text: string;
+  html?: string;
 }) {
   try {
     await transporter.verify();
@@ -76,17 +40,13 @@ export async function sendMail({
   }
 
   try {
-    // Render the template with dynamic data
-    const html = await engine.parseAndRender(emailTemplate, { firstName, lastName, email, message });
-
     const info = await transporter.sendMail({
       from: email,
-      to: SITE_MAIL_RECIEVER,
-      subject: `New Contact Form Submission from ${firstName} ${lastName}`,
-      text: `Name: ${firstName} ${lastName}\nEmail: ${email}\nMessage: ${message}`,
-      html: html,
+      to: sendTo || SITE_MAIL_RECIEVER,
+      subject: subject,
+      text: text,
+      html: html ? html : '',
     });
-
     console.log('Message Sent', info.messageId);
     console.log('Mail sent to', SITE_MAIL_RECIEVER);
     return info;

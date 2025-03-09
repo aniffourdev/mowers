@@ -7,7 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { firstName, lastName, email, message } = req.body;
 
     try {
-      await sendMail({ firstName, lastName, email, message });
+      await sendMail({
+        email,
+        sendTo: process.env.SITE_MAIL_RECIEVER,
+        subject: `New Contact Form Submission from ${firstName} ${lastName}`,
+        text: `Name: ${firstName} ${lastName}\nEmail: ${email}\nMessage: ${message}`,
+        html: `<p>Name: ${firstName} ${lastName}</p><p>Email: ${email}</p><p>Message: ${message}</p>`,
+      });
+
       res.status(200).json({ message: 'Email sent successfully!' });
     } catch (error) {
       console.error('Error sending email:', error);
