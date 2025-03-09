@@ -1,4 +1,3 @@
-// lib/sendMail.ts
 'use server';
 import nodemailer from 'nodemailer';
 import { Liquid } from 'liquid';
@@ -44,7 +43,7 @@ export async function sendMail({
 
   try {
     // Read the Liquid template file
-    const templatePath = path.join(process.cwd(), 'src/templates/emailTemplate.liquid');
+    const templatePath = path.join(process.cwd(), 'src/app/templates/contactTemplate.liquid');
     const template = fs.readFileSync(templatePath, 'utf8');
 
     // Render the template with dynamic data
