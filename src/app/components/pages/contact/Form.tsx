@@ -4,6 +4,7 @@ import React from "react";
 import { Lato, Noto_Sans } from "next/font/google";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { Toaster, toast } from "react-hot-toast";
 
 const noto = Noto_Sans({ weight: "400", subsets: ["latin"] });
 const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
@@ -41,7 +42,7 @@ const ContactForm = () => {
       });
 
       if (response.ok) {
-        alert("Form submitted successfully!");
+        toast.success("Message sent successfully! We'll get back to you soon.");
         resetForm();
       } else {
         throw new Error("Failed to send email.");
@@ -55,6 +56,7 @@ const ContactForm = () => {
   };
 
   return (
+    <>
     <Formik
       initialValues={{
         firstName: "",
@@ -159,6 +161,8 @@ const ContactForm = () => {
         </Form>
       )}
     </Formik>
+    <Toaster position="top-right" reverseOrder={true} />
+    </>
   );
 };
 
