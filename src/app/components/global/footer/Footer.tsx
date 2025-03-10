@@ -14,11 +14,13 @@ import {
 import Link from "next/link";
 import SiteLogo from "../../../../../public/assets/impose-logo.png";
 import Policies from "./Policies";
+import { Setting, settings_infos } from "@/api/graphql/content/settings";
 
 const Footer = () => {
   const [socialLinks, setSocialLinks] = useState<SocialLinks | null>(null);
   const [loading, setLoading] = useState(true);
   const [menuItems, setMenuItems] = useState<MenuItem[] | string | null>(null);
+  const [settings, setSettings] = useState<Setting | null>(null);
 
   useEffect(() => {
     const getSocialLinks = async () => {
@@ -41,12 +43,52 @@ const Footer = () => {
     fetchMenuItems();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Parallel fetch for better performance
+        const [authorData, fetchedSocialLinks] = await Promise.all([
+          settings_infos(),
+          fetchSocialLinks(),
+        ]);
+
+        console.log("Settings data:", authorData); // Log the settings data
+        setSettings(authorData);
+        setSocialLinks(fetchedSocialLinks);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!settings) {
+    return <p className="text-center my-4">No Settings Found!</p>;
+  }
+
   if (loading || menuItems === null) {
     return (
-      <div className="flex justify-center items-center gap-3">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton key={index} width={20} height={20} />
-        ))}
+      <div className="max-w-screen-lg px-5 py-8 mx-auto justify-between flex items-center lg:flex-row flex-col">
+        <div className="flex justify-start items-center gap-2">
+          <Skeleton width={150} height={15} />
+          <Skeleton width={100} height={15} />
+          <Skeleton width={80} height={15} />
+        </div>
+        <div className="flex justify-start items-center gap-2">
+          <Skeleton width={60} height={15} />
+          <Skeleton width={60} height={15} />
+          <Skeleton width={60} height={15} />
+          <Skeleton width={60} height={15} />
+        </div>
+        <div className="flex justify-start items-center gap-2">
+          <Skeleton width={20} height={20} />
+          <Skeleton width={20} height={20} />
+          <Skeleton width={20} height={20} />
+          <Skeleton width={20} height={20} />
+        </div>
       </div>
     );
   }
@@ -73,13 +115,13 @@ const Footer = () => {
           title="Site Logo"
         />
         <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
-          © {new Date().getFullYear()} Bkmower —
+          © {new Date().getFullYear()} {settings.title} —
           <Link
             href="/"
             className="text-black ml-1 font-medium"
             rel="noopener noreferrer"
           >
-            @bkmower
+            @{settings.title}
           </Link>
         </p>
         <nav className="ml-0 lg:ml-10 mt-5 lg:mt-0">
