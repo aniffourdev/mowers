@@ -26,7 +26,6 @@ const Newsletter = () => {
       .then((response) => {
         if (response.ok) {
           // router.push("/thank-u-for-subscribing");
-          alert("Thank you for subscribing!");
           toast.success("Thank you for subscribing!");
         }
         return response.json();
