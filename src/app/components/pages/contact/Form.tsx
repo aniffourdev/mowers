@@ -7,7 +7,6 @@ import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
 
 const noto = Noto_Sans({ weight: "400", subsets: ["latin"] });
-const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
 
 // Validation schema using Yup
 const validationSchema = Yup.object({

@@ -68,11 +68,11 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
             {content.posts.nodes.map((post, index) => (
               <div
                 key={post.slug}
-                className={`flex flex-col lg:flex-row ${
+                className={`flex flex-col lg:flex-row -mb-[12px] ${
                   index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                 }`}
               >
-                <div className="lg:w-5/12">
+                <div className="lg:w-6/12">
                   <figure className="mb-3">
                     <Link
                       href={`/${post.slug}`}
@@ -93,8 +93,8 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
                     </Link>
                   </figure>
                 </div>
-                <div className="lg:w-7/12">
-                  <div className="border-[1px] border-slate-200 py-[77px]">
+                <div className="lg:w-6/12">
+                  <div className="border-[1px] border-slate-200 py-[106.8px]">
                     <div className="!flex !justify-center !items-center !flex-col !space-y-5 !text-center">
                       <Link href={`/${post.categories.nodes[0].slug}`}>
                         <p

@@ -2,6 +2,7 @@
 import { Lato } from "next/font/google";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ const Newsletter = () => {
         if (response.ok) {
           // router.push("/thank-u-for-subscribing");
           alert("Thank you for subscribing!");
+          toast.success("Thank you for subscribing!");
         }
         return response.json();
       })
@@ -64,6 +66,7 @@ const Newsletter = () => {
             Get Updates
           </button>
         </form>
+        <Toaster position="top-right" reverseOrder={true} />
       </div>
     </>
   );
