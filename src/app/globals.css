@@ -234,3 +234,7 @@ strong {
 .page-content strong{
   @apply font-semibold;
 }
+
+.slick-slide {
+  padding-right: 10px;
+}
