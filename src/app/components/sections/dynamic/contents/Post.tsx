@@ -1,7 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
 import { FaFacebookF, FaTwitter, FaPlus, FaMinus } from "react-icons/fa";
 import { BsPinterest } from "react-icons/bs";
@@ -16,6 +13,26 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import CommentForm from "@/app/components/sections/dynamic/contents/Posts/CommentForm";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    slidesToSlide: 3 // optional, default to 1.
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 768 },
+    items: 2,
+    slidesToSlide: 2 // optional, default to 1.
+  },
+  mobile: {
+    breakpoint: { max: 767, min: 464 },
+    items: 2,
+    slidesToSlide: 2 // optional, default to 1.
+  }
+};
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -212,52 +229,28 @@ const RelatedPosts = ({
   }[];
 }) => {
   const settings = {
-    dots: true,
-    infinite: true,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+    dots: false,
   };
 
   return (
-    <div className="my-12">
-      <h5
+    <section className="my-12">
+      <h2
         className={`${lato.className} !text-[12px] !uppercase !text-center !tracking-wide !text-[#222] !mt-0 !mb-4`}
       >
         You May Also Like
-      </h5>
-      <Slider {...settings}>
+      </h2>
+      <Carousel
+        responsive={responsive}
+        autoPlay={true}
+        swipeable={true}
+        draggable={true}
+        showDots={true}
+        infinite={true}
+        partialVisible={false}
+        dotListClass="custom-dot-list-style"
+      >
         {posts.map((post) => (
-          <article key={post.slug} className="mb-6">
+          <article key={post.slug} className="slider mb-6">
             <figure className="mb-3">
               <Link
                 href={`/${post.slug}`}
@@ -317,8 +310,8 @@ const RelatedPosts = ({
             </p>
           </article>
         ))}
-      </Slider>
-    </div>
+      </Carousel>
+    </section>
   );
 };
 
