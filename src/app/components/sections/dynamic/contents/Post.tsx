@@ -15,6 +15,9 @@ import { motion } from "framer-motion";
 import CommentForm from "@/app/components/sections/dynamic/contents/Posts/CommentForm";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import Ratings from "@/app/components/widgets/Ratings";
+import ProductList from "@/app/components/widgets/Products";
+import Products from "@/app/components/widgets/Products";
 
 const responsive = {
   desktop: {
@@ -342,8 +345,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
     return <div>Post not found</div>;
   }
 
-  console.log("Post ID in Post component:", post.id); // Debugging line
-
   const { toc, modifiedContent } = generateTableOfContents(post.content);
   const postUrl = `https://www.${process.env.NEXT_PUBLIC_FRONTEND}/${post.slug}`;
 
@@ -659,7 +660,7 @@ const MainContent = ({
       <RelatedPosts posts={post.categories.nodes[0]?.posts.nodes || []} />
     </div>
 
-    <div className="max-w-screen-md mx-auto my-16">
+    <div className="max-w-screen-md mx-auto my-16 mb-0">
       <CommentForm postId={post.id} />
     </div>
   </article>
@@ -669,6 +670,7 @@ const Sidebar = () => (
   <aside className="lg:w-3/12">
     <About />
     <Newsletter />
+    <Products />
     {/* <RecentPosts /> */}
   </aside>
 );

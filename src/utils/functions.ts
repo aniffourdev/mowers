@@ -12,7 +12,7 @@ interface Post {
 
 export async function fetchContent(slug: string, page: number = 1, perPage: number = 10) {
   let content = await getContentBySlug(slug, page, perPage);
-  console.log("Fetched Content:", content); // Debug log
+  // console.log("Fetched Content:", content);
   const { slug: categorySlug } = content;
 
   if (content) {
@@ -144,7 +144,7 @@ export function generateSchemaMarkup(content: any) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const content = await fetchContent(slug);
-  console.log("Content for Metadata:", content); // Debug log
+  // console.log("Content for Metadata:", content);
 
   if (!content) {
     return {

@@ -39,71 +39,12 @@ interface PostsQueryResult {
   };
 }
 
-const BLOCK_4 = gql`
-  query GetPosts {
-    posts(
-      first: 6
-      where: {
-        orderby: { field: DATE, order: DESC }
-        categoryName: "Tires Size"
-        status: PUBLISH
-      }
-    ) {
-      nodes {
-        id
-        title
-        content
-        date
-        slug
-        author {
-          node {
-            name
-          }
-        }
-        categories {
-          nodes {
-            name
-          }
-        }
-        featuredImage {
-          node {
-            sourceUrl
-            altText
-            title
-          }
-        }
-        seo {
-          metaDesc
-          title
-          opengraphPublishedTime
-          opengraphModifiedTime
-        }
-      }
-    }
-  }
-`;
 
-// Tires Pressure Posts
-export async function block_4_articles(): Promise<Post[]> {
-  try {
-    const data = await client.request<PostsQueryResult>(BLOCK_4);
-    return data.posts.nodes;
-  } catch {
-    return [];
-  }
-}
+  /* ----------------------------------------  RECENT POSTS START  ----------------------------------------- */
 
-// Wheel Tires Queries
-const WheelTires = gql`
-  query GetPosts {
-    posts(
-      first: 6
-      where: {
-        orderby: { field: DATE, order: DESC }
-        categoryName: "Wheel Tires"
-        status: PUBLISH
-      }
-    ) {
+  const RecenetPosts = gql`
+  query GetRecentPosts {
+    posts(first: 5, where: { status: PUBLISH }) {
       nodes {
         id
         title
@@ -137,19 +78,17 @@ const WheelTires = gql`
   }
 `;
 
-// Wheel Tires Posts
-export async function wheel_tires_articles(): Promise<Post[]> {
+// Recent Posts
+export async function recent_posts(): Promise<Post[]> {
   try {
-    const data = await client.request<PostsQueryResult>(WheelTires);
+    const data = await client.request<PostsQueryResult>(RecenetPosts);
     return data.posts.nodes;
   } catch {
     return [];
   }
 }
-
-{
-  /* ----------------------------------------  FEATURED ARTICLES  ----------------------------------------- */
-}
+  
+  /* ----------------------------------------  END OF RECENT POSTS  ----------------------------------------- */
 
 // Featured Articles Queries
 const FeaturedArticles = gql`

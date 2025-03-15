@@ -20,6 +20,7 @@
     "graphql-request": "^7.1.2",
     "html-react-parser": "^5.2.2",
     "liquid": "^5.1.1",
+    "lucide-react": "^0.482.0",
     "motion": "^12.4.7",
     "next": "15.2.0",
     "next-nprogress-bar": "^2.4.7",

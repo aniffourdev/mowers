@@ -5,6 +5,7 @@ import Link from "next/link";
 import { featured_articles } from "@/api/graphql/content/articles";
 import { getBlurData } from "@/utils/blur-data-generator";
 import RecentPosts from "@/app/components/widgets/RecentPosts";
+import Products from "@/app/components/widgets/Products";
 import Newsletter from "@/app/components/sections/static/Newsletter";
 
 const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
@@ -26,7 +27,7 @@ const FeaturedPosts = async () => {
   return (
     <>
       <section className="max-w-screen-lg mx-auto p-4 mb-20">
-        <div className="lg:flex gap-9">
+        <div className="lg:flex gap-16">
           <div className="lg:w-9/12">
             <h2
               className={`!${lato.className} !mb-[1.4em] !pb-[0.3em] !text-center !text-[16px] !tracking-[2px] !uppercase !text-slate-400`}
@@ -34,7 +35,7 @@ const FeaturedPosts = async () => {
               Featured Articles
             </h2>
             {postsWithBlurData.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-7">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-4">
                 {postsWithBlurData.map((post) => (
                   <article key={post.slug} className="mb-6">
                     <figure className="mb-3">
@@ -119,6 +120,7 @@ const FeaturedPosts = async () => {
             <aside className="mt-16 lg:mt-0 sticky top-28">
               <Newsletter />
               <RecentPosts />
+              <Products />
             </aside>
           </div>
         </div>

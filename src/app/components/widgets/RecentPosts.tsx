@@ -1,13 +1,13 @@
 import React from "react";
 import { Lato } from "next/font/google";
 import Image from "next/image";
-import { featured_articles } from "@/api/graphql/content/articles";
+import { recent_posts } from "@/api/graphql/content/articles";
 import { getBlurData } from "@/utils/blur-data-generator";
 
 const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
 
 const RecentPosts = async () => {
-  const posts = await featured_articles();
+  const posts = await recent_posts();
 
   // Fetch blur data for each post
   const postsWithBlurData = await Promise.all(

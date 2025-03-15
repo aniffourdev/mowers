@@ -28,3 +28,16 @@ export interface AboutInfos {
   subtitle: string;
   content: string;
 }
+
+export interface Product {
+  slug: any;
+  id: number;
+  title: string;
+  content: string;
+  excerpt: string;
+  meta: {
+      price: string;
+      rating: number;
+      featured_image: string;
+  };
+}

@@ -87,7 +87,7 @@ const About = () => {
   return (
     <div className="mb-16">
       <h2
-          className={`!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+          className={`!${lato.className} !uppercase text-center lg:text-left !text-slate-400 !font-[600] !text-xs !tracking-widest`}
         >
           About me
         </h2>
@@ -106,7 +106,7 @@ const About = () => {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           height={0}
           width={0}
-          className="w-full relative z-0"
+          className="mx-auto w-[40%] lg:w-full relative z-0"
           onLoad={() => setImageLoaded(true)}
         />
       </figure>

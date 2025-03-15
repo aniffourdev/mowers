@@ -1,5 +1,5 @@
 import { fetchData, fetchCustomData } from "@/libs/api";
-import { ColorPalette, SocialLinks, ContactInfos, AboutInfos } from "@/libs/interfaces";
+import { ColorPalette, SocialLinks, ContactInfos, AboutInfos, Product } from "@/libs/interfaces";
 
 // Fetch colors using /wp/v2
 export const fetchColors = async (): Promise<ColorPalette> => {
@@ -22,5 +22,11 @@ export const fetchContactInfos = async (): Promise<ContactInfos> => {
 // Fetch about me infos using /custom/v1
 export const fetchAboutInfos = async (): Promise<AboutInfos> => {
     const data = await fetchCustomData<AboutInfos>("about-me");
+    return data;
+};
+
+// Fetch products using /custom/v1
+export const fetchProducts = async (): Promise<Product[]> => {
+    const data = await fetchCustomData<Product[]>("products");
     return data;
 };
