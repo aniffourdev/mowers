@@ -249,17 +249,23 @@ strong {
   padding: 0rem 0 2rem 0;
 }
 
+.react-multi-carousel-dot button{
+  @apply !rounded-none;
+}
+
 .custom-dot-list-style button {
   border: 0px solid #fff !important;
   @apply bg-slate-300;
-  @apply w-5;
-  @apply rounded;
+  @apply w-4;
+  @apply !h-1.5; 
+  @apply rounded-none;
   border-color: #fff !important;
 }
 .react-multi-carousel-dot.react-multi-carousel-dot--active button {
   border: 0px solid #fff !important;
   @apply bg-slate-400;
-  @apply w-5;
-  @apply rounded-full;
+  @apply w-4;
+  @apply !h-1.5; 
+  @apply rounded-none;
   border-color: #fff !important;
 }

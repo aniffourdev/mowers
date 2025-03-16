@@ -406,7 +406,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
   return (
     <main className="max-w-screen-lg mx-auto p-4 my-16">
-      <div className="lg:flex gap-12">
+      <div className="lg:flex gap-16">
         {loading ? (
           <div className="flex flex-col gap-4">
             <Skeleton height={40} width="60%" />

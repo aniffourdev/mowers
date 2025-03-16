@@ -85,7 +85,7 @@ const About = () => {
   ];
 
   return (
-    <div className="mb-16">
+    <div className="mb-16 mt-12 lg:mt-0">
       <h2
           className={`!${lato.className} !uppercase text-center lg:text-left !text-slate-400 !font-[600] !text-xs !tracking-widest`}
         >
