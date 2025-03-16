@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 import CommentForm from "@/app/components/sections/dynamic/contents/Posts/CommentForm";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import Ratings from "@/app/components/widgets/Ratings";
+import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import ProductList from "@/app/components/widgets/Products";
 import Products from "@/app/components/widgets/Products";
 
@@ -23,18 +23,18 @@ const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
     items: 3,
-    slidesToSlide: 3 // optional, default to 1.
+    slidesToSlide: 3,
   },
   tablet: {
     breakpoint: { max: 1024, min: 768 },
     items: 2,
-    slidesToSlide: 2 // optional, default to 1.
+    slidesToSlide: 2,
   },
   mobile: {
     breakpoint: { max: 767, min: 464 },
     items: 2,
-    slidesToSlide: 2 // optional, default to 1.
-  }
+    slidesToSlide: 2,
+  },
 };
 
 const poppins = Poppins({
@@ -95,8 +95,8 @@ interface PostProps {
     seo: {
       metaDesc: string;
       title: string;
-      opengraphPublishedTime?: string; // Make this optional
-      readingTime?: number; // Make this optional
+      opengraphPublishedTime?: string;
+      readingTime?: number;
     };
     categories: {
       nodes: {
@@ -121,7 +121,7 @@ interface PostProps {
         };
       }[];
     };
-    id: string; // Add the post ID here
+    id: string;
   };
 }
 
@@ -167,7 +167,6 @@ const generateTableOfContents = (content: string) => {
   return { toc, modifiedContent };
 };
 
-// Function to replace <a> with Next.js <Link> for internal links
 const replaceLinks = (content: string) => {
   return parse(content, {
     replace: (domNode: DOMNode) => {
@@ -179,7 +178,7 @@ const replaceLinks = (content: string) => {
         const href = domNode.attribs.href;
         const isInternal =
           href.startsWith("/") ||
-          href.includes(`${process.env.NEXT_PUBLIC_FRONTEND}`); // Adjust for your domain
+          href.includes(`${process.env.NEXT_PUBLIC_FRONTEND}`);
         if (isInternal) {
           return (
             <Link href={href} className={domNode.attribs.class || ""}>
@@ -321,6 +320,10 @@ const RelatedPosts = ({
 const Post: React.FC<PostProps> = ({ post }) => {
   const [socialLinks, setSocialLinks] = useState<SocialLinks | null>(null);
   const [loading, setLoading] = useState(true);
+  const [previousPost, setPreviousPost] = useState<PostProps["post"] | null>(
+    null
+  );
+  const [nextPost, setNextPost] = useState<PostProps["post"] | null>(null);
 
   useEffect(() => {
     const getSocialLinks = async () => {
@@ -337,8 +340,25 @@ const Post: React.FC<PostProps> = ({ post }) => {
     getSocialLinks();
   }, []);
 
+  useEffect(() => {
+    if (post && post.categories.nodes.length > 0) {
+      const categoryPosts = post.categories.nodes[0].posts.nodes;
+      const currentPostIndex = categoryPosts.findIndex(
+        (p) => p.slug === post.slug
+      );
+
+      if (currentPostIndex > 0) {
+        setPreviousPost(categoryPosts[currentPostIndex - 1]);
+      }
+
+      if (currentPostIndex < categoryPosts.length - 1) {
+        setNextPost(categoryPosts[currentPostIndex + 1]);
+      }
+    }
+  }, [post]);
+
   if (!socialLinks) {
-    return null; // Ensure socialLinks are available before rendering
+    return null;
   }
 
   if (!post) {
@@ -367,6 +387,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
             modifiedContent={modifiedContent}
             postUrl={postUrl}
             toc={toc}
+            previousPost={previousPost}
+            nextPost={nextPost}
           />
         )}
         <Sidebar />
@@ -454,11 +476,15 @@ const MainContent = ({
   modifiedContent,
   postUrl,
   toc,
+  previousPost,
+  nextPost,
 }: {
   post: PostProps["post"];
   modifiedContent: string;
   postUrl: string;
   toc: { text: string; id: string; level: number }[];
+  previousPost: PostProps["post"] | null;
+  nextPost: PostProps["post"] | null;
 }) => (
   <article className="lg:w-9/12">
     <header>
@@ -594,6 +620,48 @@ const MainContent = ({
           </li>
         </ul>
       </nav>
+    </div>
+
+    <div className="flex justify-between items-center gap-20">
+      {previousPost && (
+        <div className="my-12">
+          <h4
+            className={`!${lato.className} !uppercase !text-slate-400 !font-normal !text-xs !tracking-widest`}
+          >
+            Previous Post
+          </h4>
+          <Link href={`/${previousPost.slug}`}>
+            <div className="flex justify-center items-center gap-2 text-left">
+              <GoArrowLeft className="size-3.5 relative -top-[3px]" />
+              <h4 className="text-black font-medium !text-sm lg:!text-[16px] transition-all hover:!text-emerald-700">
+                {previousPost.title.length > 15
+                  ? `${previousPost.title.substring(0, 15)}...`
+                  : previousPost.title}
+              </h4>
+            </div>
+          </Link>
+        </div>
+      )}
+
+      {nextPost && (
+        <div className="my-12">
+          <h4
+            className={`!${lato.className} flex justify-end !uppercase !text-slate-400 !font-normal !text-xs !tracking-widest`}
+          >
+            Next Post
+          </h4>
+          <Link href={`/${nextPost.slug}`}>
+            <div className="flex justify-center items-center gap-2 text-right">
+              <h4 className="text-black font-medium !text-sm lg:!text-[16px] transition-all hover:!text-emerald-700">
+                {nextPost.title.length > 15
+                  ? `${nextPost.title.substring(0, 15)}...`
+                  : nextPost.title}
+              </h4>
+              <GoArrowRight className="size-3.5 relative -top-[3px]" />
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
 
     <div className="my-12">
