@@ -348,11 +348,47 @@ const Post: React.FC<PostProps> = ({ post }) => {
       );
 
       if (currentPostIndex > 0) {
-        setPreviousPost(categoryPosts[currentPostIndex - 1]);
+        const previous = categoryPosts[currentPostIndex - 1];
+        setPreviousPost({
+          ...previous,
+          tags: { nodes: [] },
+          category: { nodes: [] },
+          author: null,
+          id: "",
+          slug: previous.slug,
+          title: previous.title,
+          content: previous.content,
+          seo: previous.seo,
+          featuredImage: previous.featuredImage,
+          categories: {
+            nodes: previous.categories.nodes.map((category) => ({
+              ...category,
+              posts: { nodes: [] }, // Add the required posts property
+            })),
+          },
+        });
       }
 
       if (currentPostIndex < categoryPosts.length - 1) {
-        setNextPost(categoryPosts[currentPostIndex + 1]);
+        const next = categoryPosts[currentPostIndex + 1];
+        setNextPost({
+          ...next,
+          tags: { nodes: [] },
+          category: { nodes: [] },
+          author: null,
+          id: "",
+          slug: next.slug,
+          title: next.title,
+          content: next.content,
+          seo: next.seo,
+          featuredImage: next.featuredImage,
+          categories: {
+            nodes: next.categories.nodes.map((category) => ({
+              ...category,
+              posts: { nodes: [] }, // Add the required posts property
+            })),
+          },
+        });
       }
     }
   }, [post]);
