@@ -81,9 +81,9 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
         {/* Rating distribution bars */}
         <div className="flex items-center">
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Excellent</span>
-          <div className="flex-1 h-4 ml-2 bg-slate-200 rounded">
+          <div className="flex-1 h-3 ml-2 bg-slate-200">
             <div 
-              className="h-4 bg-yellow-400 rounded" 
+              className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.excellent}%` }}
             ></div>
           </div>
@@ -92,9 +92,9 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
         
         <div className="flex items-center">
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Very good</span>
-          <div className="flex-1 h-4 ml-2 bg-slate-200 rounded">
+          <div className="flex-1 h-3 ml-2 bg-slate-200">
             <div 
-              className="h-4 bg-yellow-400 rounded" 
+              className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.veryGood}%` }}
             ></div>
           </div>
@@ -103,9 +103,9 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
         
         <div className="flex items-center">
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Average</span>
-          <div className="flex-1 h-4 ml-2 bg-slate-200 rounded">
+          <div className="flex-1 h-3 ml-2 bg-slate-200">
             <div 
-              className="h-4 bg-yellow-400 rounded" 
+              className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.average}%` }}
             ></div>
           </div>
@@ -114,9 +114,9 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
         
         <div className="flex items-center">
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Poor</span>
-          <div className="flex-1 h-4 ml-2 bg-slate-200 rounded">
+          <div className="flex-1 h-3 ml-2 bg-slate-200">
             <div 
-              className="h-4 bg-yellow-400 rounded" 
+              className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.poor}%` }}
             ></div>
           </div>
@@ -125,9 +125,9 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
         
         <div className="flex items-center">
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Terrible</span>
-          <div className="flex-1 h-4 ml-2 bg-slate-200 rounded">
+          <div className="flex-1 h-3 ml-2 bg-slate-200">
             <div 
-              className="h-4 bg-yellow-400 rounded" 
+              className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.terrible}%` }}
             ></div>
           </div>

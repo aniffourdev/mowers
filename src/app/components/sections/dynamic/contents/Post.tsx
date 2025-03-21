@@ -16,7 +16,6 @@ import CommentForm from "@/app/components/sections/dynamic/contents/Posts/Commen
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
-import ProductList from "@/app/components/widgets/Products";
 import Products from "@/app/components/widgets/Products";
 
 const responsive = {
@@ -774,7 +773,9 @@ const Sidebar = () => (
   <aside className="lg:w-3/12">
     <About />
     <Newsletter />
-    <Products />
+    <div className="sticky top-20">
+      <Products />
+    </div>
     {/* <RecentPosts /> */}
   </aside>
 );

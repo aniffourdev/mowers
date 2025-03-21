@@ -193,7 +193,35 @@ const ProductList = () => {
     return stars;
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <>
+        <div className="mb-4">
+          <Skeleton height={100} className="w-full rounded mb-2" />
+          <Skeleton height={30} className="w-full rounded mb-1" />
+          <div className="flex gap-2.5">
+            <div className="w-8/12">
+              <Skeleton height={20} className="w-full" />
+            </div>
+            <div className="w-4/12">
+              <Skeleton height={20} className="w-full" />
+            </div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <Skeleton height={100} className="w-full rounded mb-2" />
+          <Skeleton height={25} className="w-full rounded mb-1" />
+          <div className="flex gap-2.5">
+            <div className="w-8/12">
+              <Skeleton height={20} className="w-full" />
+            </div>
+            <div className="w-4/12">
+              <Skeleton height={20} className="w-full" />
+            </div>
+          </div>
+        </div>
+      </>
+    );
   if (error) return <p>Error: {error}</p>;
   if (!products) return <p>No products found.</p>;
 
@@ -201,42 +229,45 @@ const ProductList = () => {
     <div className="mb-16 border-t-2 border-slate-200 pt-3">
       <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
         {products.map((product) => (
-          <article
+          <Link
             key={product.id}
-            className="border-b-[0px] lg:border-b-[1px] border-slate-200 pb-2.5"
+            href={product.meta.affiliation_link_url}
+            target="_blank"
           >
-            <div className="overflow-hidden rounded bg-gray-100 mb-2">
-              <Image
-                src={product.meta.featured_image}
-                alt={product.title}
-                width={200}
-                height={200}
-                className="object-cover group-hover:scale-110 transition-transform duration-200 w-full"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <Link href={`/`} className="block">
-                <h3
-                  className={`!text-black !text-xs md:!text-sm !normal-case !mb-1`}
-                >
-                  {product.title.length > 45
-                    ? `${product.title.substring(0, 45)}...`
-                    : product.title}
-                </h3>
-              </Link>
-              <div className="flex justify-start items-center gap-2.5">
-                <div className="flex items-center">
-                  <div className="flex">{renderStars(product.meta.rating)}</div>
-                  <span className="text-xs text-gray-500 ml-1">
-                    ({product.meta.rating})
-                  </span>
-                </div>
-                <div className="font-semibold text-md text-emerald-600">
-                  ${product.meta.price}
+            <article className="border-b-[0px] lg:border-b-[1px] border-slate-200 pb-2.5">
+              <div className="overflow-hidden rounded bg-gray-100 mb-2">
+                <Image
+                  src={product.meta.featured_image}
+                  alt={product.title}
+                  width={200}
+                  height={200}
+                  className="object-cover h-[100px] group-hover:scale-110 transition-transform duration-200 w-full"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+              <h3
+                    className={`!text-black block !text-xs md:!text-[13px] !normal-case !mb-1`}
+                  >
+                    {product.title.length > 35
+                      ? `${product.title.substring(0, 35)}...`
+                      : product.title}
+                  </h3>
+                <div className="flex justify-start items-center gap-2.5">
+                  <div className="flex items-center">
+                    <div className="flex">
+                      {renderStars(product.meta.rating)}
+                    </div>
+                    <span className="text-xs text-gray-500 ml-1">
+                      ({product.meta.rating})
+                    </span>
+                  </div>
+                  <div className="font-semibold text-md text-emerald-600">
+                    ${product.meta.price}
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </Link>
         ))}
       </div>
     </div>

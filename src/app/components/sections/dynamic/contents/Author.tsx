@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import About from "@/app/components/widgets/About";
 import Newsletter from "@/app/components/sections/static/Newsletter";
+import Products from "@/app/components/widgets/Products";
 
 interface Post {
   title: string;
@@ -126,6 +127,7 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
         <div className="lg:w-3/12">
           <About />
           <Newsletter />
+          <Products />
         </div>
       </div>
     </main>

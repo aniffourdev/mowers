@@ -38,6 +38,7 @@ export interface Product {
   meta: {
       price: string;
       rating: number;
+      affiliation_link_url: string;
       featured_image: string;
   };
 }

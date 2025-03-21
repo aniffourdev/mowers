@@ -4,6 +4,7 @@ import About from "@/app/components/widgets/About";
 import Newsletter from "@/app/components/sections/static/Newsletter";
 import Image from "next/image";
 import Link from "next/link";
+import Products from "@/app/components/widgets/Products";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -139,6 +140,7 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
         <div className="lg:w-3/12">
           <About />
           <Newsletter />
+          <Products />
         </div>
       </div>
     </main>
