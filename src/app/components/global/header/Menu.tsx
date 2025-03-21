@@ -25,7 +25,7 @@ const cleanCategoryPath = (path: string): string => {
   return path;
 };
 
-const MenuItemComponent = ({ item }: { item: MenuItem }) => {
+const MenuItemComponent = React.memo(({ item }: { item: MenuItem }) => {
   const rawHref =
     item.path ||
     item.url ||
@@ -69,7 +69,9 @@ const MenuItemComponent = ({ item }: { item: MenuItem }) => {
       )}
     </li>
   );
-};
+});
+
+MenuItemComponent.displayName = "MenuItemComponent";
 
 export default function Menu() {
   const [menuItems, setMenuItems] = useState<MenuItem[] | null>(null);
@@ -77,18 +79,18 @@ export default function Menu() {
 
   useEffect(() => {
     async function fetchMenu() {
-      const items = await getMenuByName("Main");
-      if (Array.isArray(items)) {
-        // Check if items is an array
-        setMenuItems(items);
-      } else if (items === null) {
-        // Check if items is null
-        setMenuItems(null);
-      } else {
-        // If items is a string, handle it accordingly
-        console.error("Unexpected response from getMenuByName:", items);
+      try {
+        const items = await getMenuByName("Main");
+        if (Array.isArray(items)) {
+          setMenuItems(items);
+        } else {
+          setMenuItems(null);
+        }
+      } catch (error) {
+        console.error("Error fetching menu items:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     fetchMenu();
@@ -108,7 +110,7 @@ export default function Menu() {
     );
   }
 
-  if (!menuItems || typeof menuItems === "string") {
+  if (!menuItems) {
     return (
       <Link
         target="_blank"

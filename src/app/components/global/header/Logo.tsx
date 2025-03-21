@@ -1,8 +1,8 @@
 import React from "react";
-import SiteLogo from "../../../../../public/assets/impose-logo.png";
 import Image from "next/image";
+import SiteLogo from "../../../../../public/assets/impose-logo.png";
 
-const Logo = () => {
+const Logo = React.memo(() => {
   return (
     <div>
       <Image
@@ -14,6 +14,8 @@ const Logo = () => {
       />
     </div>
   );
-};
+});
+
+Logo.displayName = "Logo";
 
 export default Logo;

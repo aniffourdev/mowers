@@ -1,10 +1,12 @@
-// Mobilemenu.tsx
 "use client";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { motion } from "framer-motion";
-import Drawermenu from "@/app/components/global/header/mobile/Drawermenu";
+import dynamic from "next/dynamic";
 import { MenuItem } from "@/services/menu";
+
+// Dynamically import the Drawermenu component
+const Drawermenu = dynamic(() => import("@/app/components/global/header/mobile/Drawermenu"));
 
 interface MobilemenuProps {
   menuItems: MenuItem[] | null;
@@ -41,7 +43,9 @@ const Mobilemenu = ({ menuItems, loading }: MobilemenuProps) => {
           exit={{ x: -300 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
-          <Drawermenu menuItems={menuItems} loading={loading} toggleDrawer={toggleDrawer} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Drawermenu menuItems={menuItems} loading={loading} toggleDrawer={toggleDrawer} />
+          </Suspense>
         </motion.div>
       )}
     </>

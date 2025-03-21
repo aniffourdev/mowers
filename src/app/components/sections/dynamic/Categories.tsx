@@ -52,7 +52,7 @@ const CategoryGrid: React.FC<{ categories: Category[] }> = ({ categories }) => {
                 placeholder="blur"
                 blurDataURL={category.blurData}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-teal-900/50 to-transparent flex justify-center items-center">
+              <div className="absolute inset-0 bg-gradient-to-teal-200/50 from-teal-900/50 to-transparent flex justify-center items-center">
                 <h4
                   className={`${poppins.className} !bg-black/65 !text-white !w-full !uppercase !py-5 !text-sm !lg:text-lg !font-semibold !text-center`}
                 >

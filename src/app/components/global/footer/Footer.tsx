@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { fetchSocialLinks } from "@/api/rest/fetchFunctions";
 import { getMenuByName, MenuItem } from "@/services/menu";
 import { SocialLinks } from "@/libs/interfaces";
@@ -13,8 +13,11 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import SiteLogo from "../../../../../public/assets/impose-logo.png";
-import Policies from "./Policies";
+import dynamic from "next/dynamic";
 import { Setting, settings_infos } from "@/api/graphql/content/settings";
+
+// Dynamically import the Policies component
+const Policies = dynamic(() => import("./Policies"));
 
 const Footer = () => {
   const [socialLinks, setSocialLinks] = useState<SocialLinks | null>(null);
@@ -23,38 +26,19 @@ const Footer = () => {
   const [settings, setSettings] = useState<Setting | null>(null);
 
   useEffect(() => {
-    const getSocialLinks = async () => {
-      try {
-        const fetchedSocialLinks = await fetchSocialLinks();
-        setSocialLinks(fetchedSocialLinks);
-      } catch (error) {
-        console.error("Error fetching social links:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchMenuItems = async () => {
-      const data = await getMenuByName("Policies");
-      setMenuItems(data);
-    };
-
-    getSocialLinks();
-    fetchMenuItems();
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         // Parallel fetch for better performance
-        const [authorData, fetchedSocialLinks] = await Promise.all([
+        const [authorData, fetchedSocialLinks, menuData] = await Promise.all([
           settings_infos(),
           fetchSocialLinks(),
+          getMenuByName("Policies"),
         ]);
 
         console.log("Settings data:", authorData); // Log the settings data
         setSettings(authorData);
         setSocialLinks(fetchedSocialLinks);
+        setMenuItems(menuData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -125,7 +109,9 @@ const Footer = () => {
           </Link>
         </p>
         <nav className="ml-0 lg:ml-10 mt-5 lg:mt-0">
-          <Policies menuItems={menuItems} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Policies menuItems={menuItems} />
+          </Suspense>
         </nav>
         <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
           <nav aria-label="Social Media Links">

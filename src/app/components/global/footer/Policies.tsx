@@ -14,7 +14,7 @@ const cleanCategoryPath = (path: string): string => {
     : path;
 };
 
-const MenuItemComponent = ({ item }: { item: MenuItem }) => {
+const MenuItemComponent = React.memo(({ item }: { item: MenuItem }) => {
   const rawHref =
     item.path ||
     item.url ||
@@ -32,7 +32,9 @@ const MenuItemComponent = ({ item }: { item: MenuItem }) => {
       </Link>
     </li>
   );
-};
+});
+
+MenuItemComponent.displayName = "MenuItemComponent";
 
 const QuickLinks = ({ menuItems }: { menuItems: MenuItem[] | string }) => {
   if (!menuItems) {
@@ -58,10 +60,17 @@ const QuickLinks = ({ menuItems }: { menuItems: MenuItem[] | string }) => {
 
 // Fetch data outside the component
 export async function getServerSideProps() {
-  const menuItems = await getMenuByName("Policies");
-  return {
-    props: { menuItems },
-  };
+  try {
+    const menuItems = await getMenuByName("Policies");
+    return {
+      props: { menuItems },
+    };
+  } catch (error) {
+    console.error("Error fetching menu items:", error);
+    return {
+      props: { menuItems: "Error fetching menu items" },
+    };
+  }
 }
 
 export default QuickLinks;

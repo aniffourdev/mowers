@@ -5,7 +5,7 @@ interface MyContextType {
   value: string;
 }
 
-const MyContext = createContext<MyContextType | null>(null);
+const MyContext = createContext<MyContextType>({ value: "" });
 
 export const MyProvider = ({ children }: { children: ReactNode }) => {
   const value = "Some Value";
@@ -14,7 +14,7 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
 
 export const useMyContext = () => {
   const context = useContext(MyContext);
-  if (context === null) {
+  if (!context) {
     throw new Error("useMyContext must be used within a MyProvider");
   }
   return context;

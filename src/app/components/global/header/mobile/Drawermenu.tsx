@@ -1,17 +1,11 @@
-// Drawermenu.tsx
 "use client";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { MenuItem } from "@/services/menu";
-import {
-  MdOutlineKeyboardArrowDown,
-  MdOutlineKeyboardArrowUp,
-} from "react-icons/md";
+import { FiMinusSquare, FiPlusSquare } from "react-icons/fi";
 import { Poppins } from "next/font/google";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { CiSquareMinus, CiSquarePlus } from "react-icons/ci";
-import { FiMinusSquare, FiPlusSquare } from "react-icons/fi";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -36,7 +30,7 @@ interface MenuItemComponentProps {
   toggleDrawer: () => void;
 }
 
-const MenuItemComponent = ({ item, toggleDrawer }: MenuItemComponentProps) => {
+const MenuItemComponent = React.memo(({ item, toggleDrawer }: MenuItemComponentProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -93,7 +87,9 @@ const MenuItemComponent = ({ item, toggleDrawer }: MenuItemComponentProps) => {
       )}
     </li>
   );
-};
+});
+
+MenuItemComponent.displayName = "MenuItemComponent";
 
 interface DrawermenuProps {
   menuItems: MenuItem[] | null;
@@ -113,7 +109,7 @@ export default function Drawermenu({
           {[...Array(6)].map((_, index) => (
             <li
               key={index}
-              className="relative group w-full no-last-gap cursor-pointer !py-[13x] border-b-[1px] border-slate-200"
+              className="relative group w-full no-last-gap cursor-pointer py-[13px] border-b-[1px] border-slate-200"
             >
               <Skeleton width={100} height={20} />
             </li>
@@ -123,7 +119,7 @@ export default function Drawermenu({
     );
   }
 
-  if (!menuItems || typeof menuItems === "string") {
+  if (!menuItems) {
     return (
       <Link
         target="_blank"

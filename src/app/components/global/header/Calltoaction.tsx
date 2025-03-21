@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
+import dynamic from "next/dynamic";
 import {
   FaFacebookSquare,
   FaInstagramSquare,
@@ -11,7 +12,9 @@ import { fetchSocialLinks } from "@/api/rest/fetchFunctions";
 import { SocialLinks } from "@/libs/interfaces";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Search from "@/app/components/Search";
+
+// Dynamically import the Search component
+const Search = dynamic(() => import("@/app/components/Search"));
 
 const Calltoaction = () => {
   const [socialLinks, setSocialLinks] = useState<SocialLinks | null>(null);
@@ -57,7 +60,9 @@ const Calltoaction = () => {
     <nav aria-label="Social Media Links">
       <ul className="flex justify-center items-center gap-2">
         <li className="mr-5">
-          <Search />
+          <Suspense fallback={<Skeleton width={20} height={20} />}>
+            <Search />
+          </Suspense>
         </li>
         {socialMediaIcons.map(({ name, icon: Icon, link }) => (
           <li key={name}>
