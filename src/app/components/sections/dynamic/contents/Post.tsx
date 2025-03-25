@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { FaFacebookF, FaTwitter, FaPlus, FaMinus, FaEllipsisV } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaPlus,
+  FaMinus,
+  FaEllipsisV,
+} from "react-icons/fa";
 import { BsPinterest } from "react-icons/bs";
 import { Lato, Noto_Sans, Poppins } from "next/font/google";
 import parse, { DOMNode, Element } from "html-react-parser";
@@ -508,7 +514,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
 };
 
 const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
-  const [showReplyForm, setShowReplyForm] = useState<{ [key: number]: boolean }>({});
+  const [showReplyForm, setShowReplyForm] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const toggleReplyForm = (commentId: number) => {
     setShowReplyForm((prevState) => ({
@@ -527,7 +535,9 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
         <div key={comment.id} className="mb-4">
           <div className="flex justify-start !items-center gap-2.5">
             <div className="h-6 w-6 bg-slate-200 rounded-full"></div>
-            <h6 className="!text-sm !font-medium !normal-case !text-black">{comment.author_name}</h6>
+            <h6 className="!text-sm !font-medium !normal-case !text-black">
+              {comment.author_name}
+            </h6>
             <p className="text-xs text-gray-500">
               {new Date(comment.date).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -542,16 +552,33 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
               <FaEllipsisV />
             </button>
           </div>
-          <p className="mt-2 !text-gray-700 !text-sm" dangerouslySetInnerHTML={{ __html: comment.content.rendered }} />
+          <p
+            className="mt-2 !text-gray-700 !text-sm"
+            dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
+          />
           {comment.replies && comment.replies.length > 0 && (
-            <div className="ml-4 mt-2">
+            <div className="ml-8 mt-10">
               {comment.replies.map((reply) => (
                 <div key={reply.id} className="mb-2">
-                  <h6 className="text-sm font-medium">{reply.author_name}</h6>
-                  <p className="text-xs text-gray-500">
-                    {new Date(reply.date).toLocaleDateString()}
-                  </p>
-                  <p className="mt-2 text-gray-700">{reply.content.rendered}</p>
+                  <div className="flex justify-start !items-center gap-2.5">
+                    <div className="h-6 w-6 bg-slate-200 rounded-full"></div>
+                    <h6 className="!text-sm !font-medium !normal-case !text-black">
+                      {comment.author_name}
+                    </h6>
+                    <p className="text-xs text-gray-500">
+                      {new Date(comment.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+                  <p
+                    className="mt-2 !text-gray-700 !text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: comment.content.rendered,
+                    }}
+                  />
                 </div>
               ))}
             </div>
