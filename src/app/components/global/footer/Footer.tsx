@@ -50,7 +50,14 @@ const Footer = () => {
   }, []);
 
   if (!settings) {
-    return <p className="text-center my-4">No Settings Found!</p>;
+    return (
+      <div className="flex justify-start items-center gap-3.5">
+        <Skeleton width={60} height={15} />
+        <Skeleton width={60} height={15} />
+        <Skeleton width={60} height={15} />
+        <Skeleton width={60} height={15} />
+      </div>
+    );
   }
 
   if (loading || menuItems === null) {
@@ -109,7 +116,16 @@ const Footer = () => {
           </Link>
         </p>
         <nav className="ml-0 lg:ml-10 mt-5 lg:mt-0">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="flex justify-start items-center gap-3.5">
+                <Skeleton width={60} height={15} />
+                <Skeleton width={60} height={15} />
+                <Skeleton width={60} height={15} />
+                <Skeleton width={60} height={15} />
+              </div>
+            }
+          >
             <Policies menuItems={menuItems} />
           </Suspense>
         </nav>

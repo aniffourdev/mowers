@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { FaFacebookF, FaTwitter, FaPlus, FaMinus } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaPlus, FaMinus, FaEllipsisV } from "react-icons/fa";
 import { BsPinterest } from "react-icons/bs";
 import { Lato, Noto_Sans, Poppins } from "next/font/google";
 import parse, { DOMNode, Element } from "html-react-parser";
@@ -17,6 +17,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import Products from "@/app/components/widgets/Products";
+import ReplyForm from "./Posts/ReplyForm";
 
 const responsive = {
   desktop: {
@@ -122,6 +123,19 @@ interface PostProps {
     };
     id: string;
   };
+}
+
+interface Comment {
+  id: number;
+  author_name: string;
+  author_email: string;
+  content: {
+    rendered: string;
+  };
+  date: string;
+  parent: number;
+  post: number; // Add this line
+  replies?: Comment[];
 }
 
 const formatDate = (dateString: string) => {
@@ -323,6 +337,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
     null
   );
   const [nextPost, setNextPost] = useState<PostProps["post"] | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]); // Update this line
 
   useEffect(() => {
     const getSocialLinks = async () => {
@@ -392,6 +407,62 @@ const Post: React.FC<PostProps> = ({ post }) => {
     }
   }, [post]);
 
+  const fetchComments = async (postId: number) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/wp-json/wp/v2/comments?post=${postId}&parent=0`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch comments");
+    }
+    const comments = await response.json();
+
+    // Fetch replies for each comment
+    const commentsWithReplies = await Promise.all(
+      comments.map(async (comment: Comment) => {
+        const replyResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_ENDPOINT}/wp-json/wp/v2/comments?post=${postId}&parent=${comment.id}`
+        );
+        if (replyResponse.ok) {
+          const replies = await replyResponse.json();
+          return { ...comment, replies };
+        }
+        return comment;
+      })
+    );
+
+    return commentsWithReplies;
+  };
+
+  useEffect(() => {
+    const fetchAndSetComments = async () => {
+      try {
+        const postIdInt = decodePostId(post.id);
+        const fetchedComments = await fetchComments(postIdInt);
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    if (post) {
+      fetchAndSetComments();
+    }
+  }, [post]);
+
+  const decodePostId = (encodedId: string): number => {
+    try {
+      const decoded = atob(encodedId);
+      const match = decoded.match(/post:(\d+)/);
+      if (match && match[1]) {
+        return parseInt(match[1], 10);
+      }
+      throw new Error("Invalid post ID format");
+    } catch (err) {
+      console.error("Failed to decode postId:", err);
+      throw new Error("Invalid post ID");
+    }
+  };
+
   if (!socialLinks) {
     return null;
   }
@@ -428,7 +499,75 @@ const Post: React.FC<PostProps> = ({ post }) => {
         )}
         <Sidebar />
       </div>
+      <div className="max-w-screen-md mx-auto my-16 mb-0">
+        <CommentForm postId={post.id} />
+        <CommentsList comments={comments} />
+      </div>
     </main>
+  );
+};
+
+const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
+  const [showReplyForm, setShowReplyForm] = useState<{ [key: number]: boolean }>({});
+
+  const toggleReplyForm = (commentId: number) => {
+    setShowReplyForm((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId],
+    }));
+  };
+
+  if (!comments.length) {
+    return <p>No comments yet.</p>;
+  }
+
+  return (
+    <div className="mt-8">
+      {comments.map((comment) => (
+        <div key={comment.id} className="mb-4">
+          <div className="flex justify-start !items-center gap-2.5">
+            <div className="h-6 w-6 bg-slate-200 rounded-full"></div>
+            <h6 className="!text-sm !font-medium !normal-case !text-black">{comment.author_name}</h6>
+            <p className="text-xs text-gray-500">
+              {new Date(comment.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <button
+              className="ml-auto text-gray-500 hover:text-gray-700"
+              onClick={() => toggleReplyForm(comment.id)}
+            >
+              <FaEllipsisV />
+            </button>
+          </div>
+          <p className="mt-2 !text-gray-700 !text-sm" dangerouslySetInnerHTML={{ __html: comment.content.rendered }} />
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="ml-4 mt-2">
+              {comment.replies.map((reply) => (
+                <div key={reply.id} className="mb-2">
+                  <h6 className="text-sm font-medium">{reply.author_name}</h6>
+                  <p className="text-xs text-gray-500">
+                    {new Date(reply.date).toLocaleDateString()}
+                  </p>
+                  <p className="mt-2 text-gray-700">{reply.content.rendered}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          {showReplyForm[comment.id] && (
+            <ReplyForm parentId={comment.id} postId={comment.post} />
+          )}
+          <button
+            className="text-blue-500 text-xs mt-2"
+            onClick={() => toggleReplyForm(comment.id)}
+          >
+            {showReplyForm[comment.id] ? "Cancel Reply" : "Reply"}
+          </button>
+        </div>
+      ))}
+    </div>
   );
 };
 
@@ -761,10 +900,6 @@ const MainContent = ({
 
     <div className="max-w-screen-md mx-auto my-16">
       <RelatedPosts posts={post.categories.nodes[0]?.posts.nodes || []} />
-    </div>
-
-    <div className="max-w-screen-md mx-auto my-16 mb-0">
-      <CommentForm postId={post.id} />
     </div>
   </article>
 );
