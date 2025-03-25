@@ -533,65 +533,97 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
     <div className="mt-8">
       {comments.map((comment) => (
         <div key={comment.id} className="mb-4">
-          <div className="flex justify-start !items-center gap-2.5">
-            <div className="h-6 w-6 bg-slate-200 rounded-full"></div>
-            <h6 className="!text-sm !font-medium !normal-case !text-black">
-              {comment.author_name}
-            </h6>
-            <p className="text-xs text-gray-500">
-              {new Date(comment.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-            <button
-              className="ml-auto text-gray-500 hover:text-gray-700"
-              onClick={() => toggleReplyForm(comment.id)}
-            >
-              <FaEllipsisV />
-            </button>
-          </div>
-          <p
-            className="mt-2 !text-gray-700 !text-sm"
-            dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
-          />
-          {comment.replies && comment.replies.length > 0 && (
-            <div className="ml-8 mt-10">
-              {comment.replies.map((reply) => (
-                <div key={reply.id} className="mb-2">
-                  <div className="flex justify-start !items-center gap-2.5">
-                    <div className="h-6 w-6 bg-slate-200 rounded-full"></div>
-                    <h6 className="!text-sm !font-medium !normal-case !text-black">
-                      {comment.author_name}
-                    </h6>
-                    <p className="text-xs text-gray-500">
-                      {new Date(comment.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
-                  <p
-                    className="mt-2 !text-gray-700 !text-sm"
-                    dangerouslySetInnerHTML={{
-                      __html: comment.content.rendered,
-                    }}
+          <article className="text-sm">
+            <footer className="flex justify-between items-center mb-2">
+              <div className="flex items-center">
+                <p className="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                  <img
+                    className="mr-2 w-6 h-6 rounded-full"
+                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                    alt="Michael Gough"
                   />
-                </div>
+                  {comment.author_name}
+                </p>
+                <p className="text-sm text-slate-400">
+                  <time dateTime="2022-02-08" title="February 8th, 2022">
+                    {new Date(comment.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </p>
+              </div>
+            </footer>
+            <p
+              className="text-gray-500 dark:text-gray-400"
+              dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
+            />
+          </article>
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="border-b-[1px] border-slate-200 mt-5 pb-5 mb-5">
+            <div className="mt-10">
+              {comment.replies.map((reply) => (
+                <article
+                  key={reply.id}
+                  className="mb-3 ml-6 lg:ml-10 text-base bg-white rounded-lg"
+                >
+                  <footer className="flex justify-between items-center mb-2">
+                    <div className="flex items-center">
+                      <p className="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                        <img
+                          className="mr-2 w-6 h-6 rounded-full"
+                          src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                          alt="Jese Leos"
+                        />
+                        {reply.author_name}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <time dateTime={reply.date} title={reply.date}>
+                        {new Date(
+                          reply.date
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                        </time>
+                      </p>
+                    </div>
+                  </footer>
+                  <p className="text-gray-500" dangerouslySetInnerHTML={{ __html: reply.content.rendered }} />
+                </article>
               ))}
+            </div>
             </div>
           )}
           {showReplyForm[comment.id] && (
             <ReplyForm parentId={comment.id} postId={comment.post} />
           )}
-          <button
-            className="text-blue-500 text-xs mt-2"
-            onClick={() => toggleReplyForm(comment.id)}
-          >
-            {showReplyForm[comment.id] ? "Cancel Reply" : "Reply"}
-          </button>
+          <div className="flex items-center mt-4 space-x-4">
+            <button
+              type="button"
+              onClick={() => toggleReplyForm(comment.id)}
+              className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400 font-medium"
+            >
+              <svg
+                className="mr-1.5 w-3.5 h-3.5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 18"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
+                ></path>
+              </svg>
+              {showReplyForm[comment.id] ? "Cancel Reply" : "Reply"}
+            </button>
+          </div>
         </div>
       ))}
     </div>
