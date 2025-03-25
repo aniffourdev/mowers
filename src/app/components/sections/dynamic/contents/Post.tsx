@@ -24,6 +24,7 @@ import "react-multi-carousel/lib/styles.css";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import Products from "@/app/components/widgets/Products";
 import ReplyForm from "./Posts/ReplyForm";
+import { LiaCommentDotsSolid } from "react-icons/lia";
 
 const responsive = {
   desktop: {
@@ -421,23 +422,31 @@ const Post: React.FC<PostProps> = ({ post }) => {
       throw new Error("Failed to fetch comments");
     }
     const comments = await response.json();
-
-    // Fetch replies for each comment
-    const commentsWithReplies = await Promise.all(
-      comments.map(async (comment: Comment) => {
-        const replyResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_ENDPOINT}/wp-json/wp/v2/comments?post=${postId}&parent=${comment.id}`
-        );
-        if (replyResponse.ok) {
-          const replies = await replyResponse.json();
-          return { ...comment, replies };
+  
+    // Fetch replies for each comment recursively
+    const fetchReplies = async (comment: Comment): Promise<Comment> => {
+      const replyResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_ENDPOINT}/wp-json/wp/v2/comments?post=${postId}&parent=${comment.id}`
+      );
+      if (replyResponse.ok) {
+        const replies = await replyResponse.json();
+        for (const reply of replies) {
+          await fetchReplies(reply);
         }
-        return comment;
-      })
-    );
-
-    return commentsWithReplies;
+        comment.replies = replies;
+      }
+      return comment;
+    };
+  
+    for (const comment of comments) {
+      await fetchReplies(comment);
+    }
+  
+    return comments;
   };
+  
+  
+  
 
   useEffect(() => {
     const fetchAndSetComments = async () => {
@@ -513,6 +522,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
   );
 };
 
+
 const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
   const [showReplyForm, setShowReplyForm] = useState<{
     [key: number]: boolean;
@@ -525,110 +535,69 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
     }));
   };
 
+  const renderComment = (comment: Comment, depth: number = 0) => (
+    <div key={comment.id} className={`relative mb-4 ${depth > 0 ? `ml-${depth * 4}` : ''}`}>
+      <div className="absolute left-0 top-0 h-full border-l-2 border-slate-200"></div>
+      <article className="text-sm border-b border-slate-100 pb-4 pl-4">
+        <footer className="flex justify-between items-center mb-2">
+          <div className="flex items-center">
+            <p className="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+              <img
+                className="mr-2 w-6 h-6 rounded-full"
+                src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                alt="Michael Gough"
+              />
+              {comment.author_name}
+            </p>
+            <p className="text-sm text-slate-400">
+              <time dateTime={comment.date} title={new Date(comment.date).toLocaleString()}>
+                {new Date(comment.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+            </p>
+          </div>
+        </footer>
+        <p
+          className="text-gray-500 dark:text-gray-400"
+          dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
+        />
+      </article>
+      <div className="flex items-center mt-2 pl-4">
+        <button
+          type="button"
+          onClick={() => toggleReplyForm(comment.id)}
+          className="flex items-center !text-xs text-black cursor-pointer uppercase font-medium border-[1.5px] border-black px-1 py-0.5 transition-all hover:bg-black hover:text-white"
+        >
+          <LiaCommentDotsSolid className="size-4 mr-0.5" />
+          {showReplyForm[comment.id] ? "Cancel Reply" : "Reply"}
+        </button>
+      </div>
+      {showReplyForm[comment.id] && (
+        <div className="pl-4">
+          <ReplyForm parentId={comment.id} postId={comment.post} />
+        </div>
+      )}
+      {comment.replies && comment.replies.length > 0 && (
+        <div className="mt-4">
+          {comment.replies.map((reply) => renderComment(reply, depth + 1))}
+        </div>
+      )}
+    </div>
+  );
+
   if (!comments.length) {
     return <p>No comments yet.</p>;
   }
 
-  return (
-    <div className="mt-8">
-      {comments.map((comment) => (
-        <div key={comment.id} className="mb-4">
-          <article className="text-sm">
-            <footer className="flex justify-between items-center mb-2">
-              <div className="flex items-center">
-                <p className="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
-                  <img
-                    className="mr-2 w-6 h-6 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                    alt="Michael Gough"
-                  />
-                  {comment.author_name}
-                </p>
-                <p className="text-sm text-slate-400">
-                  <time dateTime="2022-02-08" title="February 8th, 2022">
-                    {new Date(comment.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                </p>
-              </div>
-            </footer>
-            <p
-              className="text-gray-500 dark:text-gray-400"
-              dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
-            />
-          </article>
-          {comment.replies && comment.replies.length > 0 && (
-            <div className="border-b-[1px] border-slate-200 mt-5 pb-5 mb-5">
-            <div className="mt-10">
-              {comment.replies.map((reply) => (
-                <article
-                  key={reply.id}
-                  className="mb-3 ml-6 lg:ml-10 text-base bg-white rounded-lg"
-                >
-                  <footer className="flex justify-between items-center mb-2">
-                    <div className="flex items-center">
-                      <p className="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
-                        <img
-                          className="mr-2 w-6 h-6 rounded-full"
-                          src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                          alt="Jese Leos"
-                        />
-                        {reply.author_name}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        <time dateTime={reply.date} title={reply.date}>
-                        {new Date(
-                          reply.date
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                        </time>
-                      </p>
-                    </div>
-                  </footer>
-                  <p className="text-gray-500" dangerouslySetInnerHTML={{ __html: reply.content.rendered }} />
-                </article>
-              ))}
-            </div>
-            </div>
-          )}
-          {showReplyForm[comment.id] && (
-            <ReplyForm parentId={comment.id} postId={comment.post} />
-          )}
-          <div className="flex items-center mt-4 space-x-4">
-            <button
-              type="button"
-              onClick={() => toggleReplyForm(comment.id)}
-              className="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400 font-medium"
-            >
-              <svg
-                className="mr-1.5 w-3.5 h-3.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 18"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
-                ></path>
-              </svg>
-              {showReplyForm[comment.id] ? "Cancel Reply" : "Reply"}
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  return <div className="mt-8">{comments.map((comment) => renderComment(comment))}</div>;
 };
+
+
+
+
 
 const TableOfContents = ({
   toc,
