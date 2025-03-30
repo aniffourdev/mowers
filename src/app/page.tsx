@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import React, { Suspense } from "react";
+import HomeLoading from "./components/HomeLoading";
 
 // Dynamically import components
 const Hero = dynamic(() => import("@/app/components/sections/dynamic/Hero"));
@@ -10,7 +11,7 @@ const ProductReviews = dynamic(() => import("@/app/components/sections/dynamic/P
 export default function Home() {
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<HomeLoading />}>
         <Hero />
         <Categories />
         <FeaturedPosts />
