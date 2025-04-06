@@ -1,3 +1,4 @@
+// CommentForm.tsx
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -8,9 +9,22 @@ const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
 
 interface CommentFormProps {
   postId: string; // This is the base64-encoded post ID
+  onCommentPosted: (comment: Comment) => void; // Callback to notify the parent component
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
+interface Comment {
+  id: number;
+  author_name: string;
+  author_email: string;
+  content: {
+    rendered: string;
+  };
+  date: string;
+  parent: number;
+  post: number;
+}
+
+const CommentForm: React.FC<CommentFormProps> = ({ postId, onCommentPosted }) => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
   const [success, setSuccess] = React.useState("");
@@ -52,7 +66,9 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
       });
 
       if (response.ok) {
+        const comment = await response.json();
         setSuccess("Comment posted successfully!");
+        onCommentPosted(comment); // Notify the parent component
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Failed to post comment.");

@@ -18,7 +18,7 @@ const FeaturedPosts = async () => {
     posts.map(async (post) => {
       const blurData = await getBlurData(
         post.featuredImage?.node?.sourceUrl ||
-          `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+          `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
       );
       return { ...post, blurData };
     })
@@ -46,7 +46,7 @@ const FeaturedPosts = async () => {
                         <Image
                           src={
                             post.featuredImage?.node?.sourceUrl ||
-                            `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+                            `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
                           }
                           alt={`${post.title}`}
                           title={post.featuredImage?.node.title || post.title}

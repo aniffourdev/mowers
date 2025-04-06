@@ -90,7 +90,7 @@ const Categories = async () => {
     categories.map(async (category) => {
       const blurData = await getBlurData(
         category.categoryImage ||
-          `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+          `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
       );
       return { ...category, blurData };
     })

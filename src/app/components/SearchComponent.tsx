@@ -111,7 +111,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onClose }) => {
                       <Image
                         src={
                           result.featuredImage?.node?.sourceUrl ||
-                          `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+                          `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
                         }
                         alt={
                           result.featuredImage.node.altText || result.title

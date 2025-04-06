@@ -1,3 +1,4 @@
+// Post.tsx
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
@@ -281,7 +282,7 @@ const RelatedPosts = ({
                 <Image
                   src={
                     post.featuredImage?.node?.sourceUrl ||
-                    `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+                    `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
                   }
                   alt={`${post.title}`}
                   title={post.featuredImage?.node?.title || post.title}
@@ -422,7 +423,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       throw new Error("Failed to fetch comments");
     }
     const comments = await response.json();
-  
+
     // Fetch replies for each comment recursively
     const fetchReplies = async (comment: Comment): Promise<Comment> => {
       const replyResponse = await fetch(
@@ -437,16 +438,13 @@ const Post: React.FC<PostProps> = ({ post }) => {
       }
       return comment;
     };
-  
+
     for (const comment of comments) {
       await fetchReplies(comment);
     }
-  
+
     return comments;
   };
-  
-  
-  
 
   useEffect(() => {
     const fetchAndSetComments = async () => {
@@ -476,6 +474,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
       console.error("Failed to decode postId:", err);
       throw new Error("Invalid post ID");
     }
+  };
+
+  const handleCommentPosted = (newComment: Comment) => {
+    setComments((prevComments) => [...prevComments, newComment]);
   };
 
   if (!socialLinks) {
@@ -515,13 +517,12 @@ const Post: React.FC<PostProps> = ({ post }) => {
         <Sidebar />
       </div>
       <div className="max-w-screen-md mx-auto my-16 mb-0">
-        <CommentForm postId={post.id} />
+        <CommentForm postId={post.id} onCommentPosted={handleCommentPosted} />
         <CommentsList comments={comments} />
       </div>
     </main>
   );
 };
-
 
 const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
   const [showReplyForm, setShowReplyForm] = useState<{
@@ -594,10 +595,6 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
 
   return <div className="mt-8">{comments.map((comment) => renderComment(comment))}</div>;
 };
-
-
-
-
 
 const TableOfContents = ({
   toc,
@@ -811,7 +808,7 @@ const MainContent = ({
                 postUrl
               )}&media=${encodeURIComponent(
                 post.featuredImage?.node.sourceUrl ||
-                  `https://www.gvr.ltm.temporary.site/mower/wp-content/uploads/2025/02/load.jpg`
+                  `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
               )}&description=${encodeURIComponent(post.title)}`}
               target="_blank"
               rel="noopener noreferrer"

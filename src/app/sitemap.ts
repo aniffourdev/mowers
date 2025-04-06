@@ -130,13 +130,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: post.seo.opengraphModifiedTime ? new Date(post.seo.opengraphModifiedTime) : new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.8,
-        // Images are stored but Next.js sitemap doesn't currently support them
-        // This data structure is ready when Next.js adds support
-        // images: post.featuredImage ? [{
-        //   url: post.featuredImage.node.sourceUrl,
-        //   title: post.featuredImage.node.title || '',
-        //   alt: post.featuredImage.node.altText || ''
-        // }] : undefined
       }
     })
 
