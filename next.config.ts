@@ -52,8 +52,11 @@ const nextConfig: NextConfig = {
             vendor: {
               test: /[\\/]node_modules[\\/]/,
               name(module: any) {
-                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-                return `vendor.${packageName.replace('@', '')}`;
+                const match = module.context?.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
+                if (!match) return 'vendor';
+                
+                const packageName = match[1].replace('@', '');
+                return `vendor.${packageName}`;
               },
               priority: 20,
             },
