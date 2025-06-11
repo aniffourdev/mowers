@@ -25,8 +25,11 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     path: "/_next/image",
     loader: "default",
-    domains: ['your-domain.com'],
+    domains: ['gvr.ltm.temporary.site', 'www.gvr.ltm.temporary.site'],
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   experimental: {
     turbo: {

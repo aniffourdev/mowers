@@ -30,6 +30,12 @@ export default function Document() {
         <noscript>
           <link rel="stylesheet" href="/_next/static/css/styles.css" />
         </noscript>
+
+        {/* Preconnect to image domains */}
+        <link rel="preconnect" href="https://www.gvr.ltm.temporary.site" />
+        
+        {/* DNS prefetch for image domains */}
+        <link rel="dns-prefetch" href="https://www.gvr.ltm.temporary.site" />
       </Head>
       <body>
         <Main />
