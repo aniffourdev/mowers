@@ -1,0 +1,15 @@
+/* Critical CSS for above-the-fold content */
+:root {
+  --primary-color: #000;
+  --background-color: #fff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--background-color);
+  color: var(--primary-color);
+}
+
+/* Add your critical above-the-fold styles here */ 
