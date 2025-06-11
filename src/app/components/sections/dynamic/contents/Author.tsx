@@ -5,6 +5,9 @@ import Link from "next/link";
 import About from "@/app/components/widgets/About";
 import Newsletter from "@/app/components/sections/static/Newsletter";
 import Products from "@/app/components/widgets/Products";
+import localFont from 'next/font/local';
+
+const Parafina = localFont({ src: './fonts/parafina.woff2' })
 
 interface Post {
   title: string;
@@ -60,7 +63,7 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
               Posts by
             </div>
             <h1
-              className={`${poppins.className} text-[26px] text-black font-bold uppercase mt-1`}
+              className={`${Parafina.className} text-3xl text-black font-bold uppercase mt-1`}
             >
               {content.name}
             </h1>

@@ -7,7 +7,17 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/post/',
+          '/category/',
+          '/*.jpg$',
+          '/*.jpeg$',
+          '/*.png$',
+          '/*.gif$',
+          '/*.webp$',
+          '/*.svg$'
+        ],
         disallow: [
           '/api/',
           '/dashboard/',
@@ -21,8 +31,26 @@ export default function robots(): MetadataRoute.Robots {
           '/author/',
           '/tag/',
           '/search/',
-          '/page/',   // If you use pagination URLs that duplicate content
-          '/404/',    // 404 page shouldn't be indexed
+          '/page/',
+          '/404/',
+          '/my-account/',
+          '/cart/',
+          '/checkout/',
+          '/wp-content/uploads/*.php$',
+          '/wp-content/uploads/*.js$',
+          '/wp-content/uploads/*.css$',
+          '/wp-content/uploads/*.txt$',
+          '/wp-content/uploads/*.xml$',
+          '/wp-content/uploads/*.json$',
+          '/wp-content/uploads/*.sql$',
+          '/wp-content/uploads/*.log$',
+          '/wp-content/uploads/*.bak$',
+          '/wp-content/uploads/*.old$',
+          '/wp-content/uploads/*.tmp$',
+          '/wp-content/uploads/*.temp$',
+          '/wp-content/uploads/*.swp$',
+          '/wp-content/uploads/*.swo$',
+          '/wp-content/uploads/*.swn$'
         ],
       },
       {
@@ -41,16 +69,49 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        // Add specific rules for social media crawlers
         userAgent: 'facebookexternalhit',
         allow: '/',
       },
       {
         userAgent: 'Twitterbot',
         allow: '/',
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: [
+          '/author/',
+          '/tag/',
+          '/search/',
+          '/page/',
+          '/404/',
+          '/my-account/',
+          '/cart/',
+          '/checkout/'
+        ],
+      },
+      {
+        userAgent: 'Yandex',
+        allow: '/',
+        disallow: [
+          '/author/',
+          '/tag/',
+          '/search/',
+          '/page/',
+          '/404/',
+          '/my-account/',
+          '/cart/',
+          '/checkout/'
+        ],
       }
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [
+      `${baseUrl}/sitemap.xml`,
+      `${baseUrl}/post-sitemap.xml`,
+      `${baseUrl}/page-sitemap.xml`,
+      `${baseUrl}/category-sitemap.xml`,
+      `${baseUrl}/image-sitemap.xml`
+    ],
     host: baseUrl,
   }
 }

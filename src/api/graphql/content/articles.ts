@@ -21,6 +21,7 @@ export interface Post {
   categories: {
     nodes: {
       name: string;
+      description: string;
       slug: string;
     }[];
   };
@@ -132,6 +133,173 @@ const FeaturedArticles = gql`
 export async function featured_articles(): Promise<Post[]> {
   try {
     const data = await client.request<PostsQueryResult>(FeaturedArticles);
+    return data.posts.nodes;
+  } catch {
+    return [];
+  }
+}
+
+
+// Products Review Articles Queries
+const ProductsReview = gql`
+  query GetPosts {
+    posts(
+      first: 4
+      where: {
+        orderby: { field: DATE, order: DESC }
+        categoryName: "Product Reviews"
+        status: PUBLISH
+      }
+    ) {
+      nodes {
+        id
+        title
+        content
+        date
+        slug
+        author {
+          node {
+            name
+          }
+        }
+        categories {
+          nodes {
+            name
+            description
+          }
+        }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+            title
+          }
+        }
+        seo {
+          metaDesc
+          title
+          opengraphPublishedTime
+          opengraphModifiedTime
+        }
+      }
+    }
+  }
+`;
+// Products Review Articles Function
+export async function products_review(): Promise<Post[]> {
+  try {
+    const data = await client.request<PostsQueryResult>(ProductsReview);
+    return data.posts.nodes;
+  } catch {
+    return [];
+  }
+}
+
+
+// Home Category 1 Queries
+const HomeCategory1 = gql`
+  query GetPosts {
+    posts(
+      first: 6
+      where: {
+        orderby: { field: DATE, order: DESC }
+        categoryName: "Riding Lawn"
+        status: PUBLISH
+      }
+    ) {
+      nodes {
+        id
+        title
+        content
+        date
+        slug
+        author {
+          node {
+            name
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+            title
+          }
+        }
+        seo {
+          metaDesc
+          title
+          opengraphPublishedTime
+          opengraphModifiedTime
+        }
+      }
+    }
+  }
+`;
+// Home Category 1 Articles Function
+export async function home_category_1(): Promise<Post[]> {
+  try {
+    const data = await client.request<PostsQueryResult>(HomeCategory1);
+    return data.posts.nodes;
+  } catch {
+    return [];
+  }
+}
+
+
+
+// Home Category 2 Queries
+const HomeCategory2 = gql`
+  query GetPosts {
+    posts(
+      first: 6
+      where: {
+        orderby: { field: DATE, order: DESC }
+        categoryName: "Battery Lawn"
+        status: PUBLISH
+      }
+    ) {
+      nodes {
+        id
+        title
+        content
+        date
+        slug
+        author {
+          node {
+            name
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
+        }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+            title
+          }
+        }
+        seo {
+          metaDesc
+          title
+          opengraphPublishedTime
+          opengraphModifiedTime
+        }
+      }
+    }
+  }
+`;
+// Home Category 2 Articles Function
+export async function home_category_2(): Promise<Post[]> {
+  try {
+    const data = await client.request<PostsQueryResult>(HomeCategory2);
     return data.posts.nodes;
   } catch {
     return [];

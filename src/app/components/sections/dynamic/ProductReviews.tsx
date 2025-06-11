@@ -240,18 +240,18 @@ const ProductList = () => {
                   src={product.meta.featured_image}
                   alt={product.title}
                   width={200}
-                  height={200}
-                  className="object-cover h-[100px] group-hover:scale-110 transition-transform duration-200 w-full"
+                  height={250}
+                  className="object-cover h-[130px] group-hover:scale-110 transition-transform duration-200 w-full"
                 />
               </div>
               <div className="flex-1 min-w-0">
-              <h3
-                    className={`!text-black block !text-xs md:!text-[13px] !normal-case !mb-1`}
-                  >
-                    {product.title.length > 35
-                      ? `${product.title.substring(0, 35)}...`
-                      : product.title}
-                  </h3>
+                <h3
+                  className={`!text-black block !text-xs md:!text-[13px] !normal-case !mb-1`}
+                >
+                  {product.title.length > 35
+                    ? `${product.title.substring(0, 35)}...`
+                    : product.title}
+                </h3>
                 <div className="flex justify-start items-center gap-2.5">
                   <div className="flex items-center">
                     <div className="flex">
@@ -261,8 +261,11 @@ const ProductList = () => {
                       ({product.meta.rating})
                     </span>
                   </div>
+                  <div className="font-semibold text-sm text-slate-400 line-through">
+                    ${product.meta.regular_price}
+                  </div>
                   <div className="font-semibold text-md text-emerald-600">
-                    ${product.meta.price}
+                    ${product.meta.sale_price}
                   </div>
                 </div>
               </div>

@@ -1,4 +1,3 @@
-// components/RatingDisplay.tsx
 import { Lato, Poppins } from 'next/font/google';
 import React from 'react';
 
@@ -65,10 +64,23 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
   };
 
   return (
-    <div className="">
+    <div 
+      className=""
+      role="region"
+      aria-label="Product ratings and reviews"
+    >
       <div className="flex items-center">
-        <span className={`text-3xl font-black -tracking-[2px] text-gray-800`}>{rating.toFixed(1)}</span>
-        <div className="flex ml-2">
+        <span 
+          className={`text-3xl font-black -tracking-[2px] text-gray-800`}
+          aria-label={`${rating.toFixed(1)} out of 5 stars`}
+        >
+          {rating.toFixed(1)}
+        </span>
+        <div 
+          className="flex ml-2"
+          role="img"
+          aria-label={`${rating.toFixed(1)} out of 5 stars`}
+        >
           {renderStars()}
         </div>
       </div>
@@ -77,11 +89,25 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
         {rating.toFixed(1)} out of 5 stars (based on {reviewCount} reviews)
       </p>
       
-      <div className="mt-4 space-y-2">
+      <div 
+        className="mt-4 space-y-2"
+        role="list"
+        aria-label="Rating distribution"
+      >
         {/* Rating distribution bars */}
-        <div className="flex items-center">
+        <div 
+          className="flex items-center"
+          role="listitem"
+        >
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Excellent</span>
-          <div className="flex-1 h-3 ml-2 bg-slate-200">
+          <div 
+            className="flex-1 h-3 ml-2 bg-slate-200"
+            role="progressbar"
+            aria-valuenow={distribution.excellent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`${distribution.excellent}% excellent ratings`}
+          >
             <div 
               className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.excellent}%` }}
@@ -90,9 +116,19 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
           <span className="w-8 ml-2 text-sm text-right font-semibold text-black">{distribution.excellent}%</span>
         </div>
         
-        <div className="flex items-center">
+        <div 
+          className="flex items-center"
+          role="listitem"
+        >
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Very good</span>
-          <div className="flex-1 h-3 ml-2 bg-slate-200">
+          <div 
+            className="flex-1 h-3 ml-2 bg-slate-200"
+            role="progressbar"
+            aria-valuenow={distribution.veryGood}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`${distribution.veryGood}% very good ratings`}
+          >
             <div 
               className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.veryGood}%` }}
@@ -101,9 +137,19 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
           <span className="w-8 ml-2 text-sm text-right font-semibold text-black">{distribution.veryGood}%</span>
         </div>
         
-        <div className="flex items-center">
+        <div 
+          className="flex items-center"
+          role="listitem"
+        >
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Average</span>
-          <div className="flex-1 h-3 ml-2 bg-slate-200">
+          <div 
+            className="flex-1 h-3 ml-2 bg-slate-200"
+            role="progressbar"
+            aria-valuenow={distribution.average}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`${distribution.average}% average ratings`}
+          >
             <div 
               className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.average}%` }}
@@ -112,9 +158,19 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
           <span className="w-8 ml-2 text-sm text-right font-semibold text-black">{distribution.average}%</span>
         </div>
         
-        <div className="flex items-center">
+        <div 
+          className="flex items-center"
+          role="listitem"
+        >
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Poor</span>
-          <div className="flex-1 h-3 ml-2 bg-slate-200">
+          <div 
+            className="flex-1 h-3 ml-2 bg-slate-200"
+            role="progressbar"
+            aria-valuenow={distribution.poor}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`${distribution.poor}% poor ratings`}
+          >
             <div 
               className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.poor}%` }}
@@ -123,9 +179,19 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
           <span className="w-8 ml-2 text-sm text-right font-semibold text-black">{distribution.poor}%</span>
         </div>
         
-        <div className="flex items-center">
+        <div 
+          className="flex items-center"
+          role="listitem"
+        >
           <span className={`${lato.className} w-16 text-sm text-gray-950`}>Terrible</span>
-          <div className="flex-1 h-3 ml-2 bg-slate-200">
+          <div 
+            className="flex-1 h-3 ml-2 bg-slate-200"
+            role="progressbar"
+            aria-valuenow={distribution.terrible}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`${distribution.terrible}% terrible ratings`}
+          >
             <div 
               className="h-3 bg-yellow-400" 
               style={{ width: `${distribution.terrible}%` }}

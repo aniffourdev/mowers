@@ -308,7 +308,7 @@ const RelatedPosts = ({
             <div className="flex justify-start items-start md:items-center gap-2 md:gap-4 mb-3.5 mt-2 flex-col md:flex-row">
               <Link
                 href={`/${post.slug}`}
-                className={`!py-0.5 !pt-[4px] !px-1.5 text-black !text-[10px] !tracking-[1px] !uppercase !border-black !border-[1px] !transition-all hover:text-white hover:bg-black`}
+                className={`!py-0.5 !pt-[4px] !px-1.5 text-black !text-[9px] !tracking-[1px] !uppercase !border-black !border-[1px] !transition-all hover:text-white hover:bg-black`}
               >
                 {post.categories.nodes[0].name}
               </Link>

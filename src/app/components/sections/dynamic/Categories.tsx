@@ -19,11 +19,15 @@ interface Category {
 }
 
 const LoadingItem: React.FC<{ blurDataURL: string }> = ({ blurDataURL }) => (
-  <article className="w-full h-[350px] relative overflow-hidden">
+  <article 
+    className="w-full h-[350px] relative overflow-hidden"
+    role="status"
+    aria-label="Loading category"
+  >
     <Image
       className="object-cover"
       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0CkAAAAASUVORK5CYII="
-      alt="Loading..."
+      alt="Loading category image..."
       fill
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       placeholder="blur"
@@ -34,25 +38,36 @@ const LoadingItem: React.FC<{ blurDataURL: string }> = ({ blurDataURL }) => (
 
 const CategoryGrid: React.FC<{ categories: Category[] }> = ({ categories }) => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 w-full">
+    <div 
+      className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 w-full"
+      role="list"
+      aria-label="Category grid"
+    >
       {categories.map((category) => (
         <article
           key={category.id}
           className="relative h-[350px] overflow-hidden"
+          role="listitem"
         >
-          <Link href={`/${category.slug}`}>
+          <Link 
+            href={`/${category.slug}`}
+            aria-label={`Browse ${category.name} category`}
+          >
             <div className="relative h-full" title={category.name}>
               <Image
                 className="object-cover"
                 src={category.categoryImage}
-                alt={`Image of ${category.name} category`}
+                alt={`Featured image for ${category.name} category`}
                 title={category.name}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 placeholder="blur"
                 blurDataURL={category.blurData}
               />
-              <div className="absolute inset-0 bg-gradient-to-teal-200/50 from-teal-900/50 to-transparent flex justify-center items-center">
+              <div 
+                className="absolute inset-0 bg-gradient-to-teal-200/50 from-teal-900/50 to-transparent flex justify-center items-center"
+                role="presentation"
+              >
                 <h4
                   className={`${poppins.className} !bg-black/65 !text-white !w-full !uppercase !py-5 !text-sm !lg:text-lg !font-semibold !text-center`}
                 >
@@ -68,7 +83,11 @@ const CategoryGrid: React.FC<{ categories: Category[] }> = ({ categories }) => {
 };
 
 const LoadingGrid: React.FC<{ blurDataURL: string }> = ({ blurDataURL }) => (
-  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 w-full">
+  <div 
+    className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 w-full"
+    role="status"
+    aria-label="Loading categories"
+  >
     {[...Array(4)].map((_, index) => (
       <LoadingItem key={index} blurDataURL={blurDataURL} />
     ))}
@@ -99,8 +118,11 @@ const Categories = async () => {
   return (
     <section
       className="max-w-screen-lg mx-auto p-4 my-20"
-      aria-label="Categories"
+      aria-label="Blog categories"
     >
+      <header className="sr-only">
+        <h2>Blog Categories</h2>
+      </header>
       <Suspense
         fallback={
           <LoadingGrid

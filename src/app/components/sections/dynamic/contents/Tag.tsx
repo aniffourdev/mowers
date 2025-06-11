@@ -2,6 +2,9 @@ import React from "react";
 import { Lato, Poppins } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import localFont from 'next/font/local';
+
+const Parafina = localFont({ src: './fonts/parafina.woff2' })
 
 interface Post {
   title: string;
@@ -73,7 +76,7 @@ const Tag: React.FC<TagProps> = ({ content }) => {
               Posts in
             </div>
             <h1
-              className={`${poppins.className} text-[26px] text-black font-bold uppercase mt-1`}
+              className={`${Parafina.className} text-3xl text-black font-bold uppercase mt-1`}
             >
               {content.name}
             </h1>

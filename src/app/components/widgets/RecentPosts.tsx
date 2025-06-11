@@ -21,27 +21,42 @@ const RecentPosts = async () => {
   );
 
   return (
-    <div className="mb-9">
-      <h2
-        className={`!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+    <aside 
+      className="mb-9"
+      aria-label="Recent blog posts"
+    >
+      <header>
+        <h2
+          className={`!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+        >
+          Recent Posts
+        </h2>
+      </header>
+      <div 
+        className="space-y-3.5"
+        role="list"
+        aria-label="List of recent posts"
       >
-        Recent Posts
-      </h2>
-      <div className="space-y-3.5">
         {postsWithBlurData.map((post) => (
-          <article key={post.slug} className="flex items-center space-x-4">
-            <Image
-              src={
-                post.featuredImage?.node?.sourceUrl ||
-                `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
-              }
-              alt={post.title}
-              title={post.featuredImage?.node.title || post.title}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="w-16 h-16"
-              height={50}
-              width={50}
-            />
+          <article 
+            key={post.slug} 
+            className="flex items-center space-x-4"
+            role="listitem"
+          >
+            <figure>
+              <Image
+                src={
+                  post.featuredImage?.node?.sourceUrl ||
+                  `https://gvr.ltm.temporary.site/mower//wp-content/uploads/2025/02/load.jpg`
+                }
+                alt={`Featured image for article: ${post.title}`}
+                title={post.featuredImage?.node.title || post.title}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="w-16 h-16"
+                height={50}
+                width={50}
+              />
+            </figure>
             <div>
               <h4 className="!text-black !font-semibold !uppercase !text-xs !mb-[-2px] !mt-0">
                 {post.title.length > 30
@@ -65,7 +80,7 @@ const RecentPosts = async () => {
           </article>
         ))}
       </div>
-    </div>
+    </aside>
   );
 };
 

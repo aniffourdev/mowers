@@ -9,6 +9,7 @@ interface SitemapPost {
   slug: string
   seo: {
     opengraphModifiedTime: string
+    canonical?: string
   }
   featuredImage?: {
     node: {
@@ -50,6 +51,7 @@ const GET_ALL_POSTS_FOR_SITEMAP = gql`
         slug
         seo {
           opengraphModifiedTime
+          canonical
         }
         featuredImage {
           node {
@@ -84,11 +86,43 @@ const GET_ALL_PAGES = gql`
   }
 `
 
+// Helper function to ensure URLs are on the same domain
+function ensureSameDomain(url: string, baseUrl: string): string {
+  try {
+    const urlObj = new URL(url)
+    const baseUrlObj = new URL(baseUrl)
+    if (urlObj.hostname !== baseUrlObj.hostname) {
+      return `${baseUrl}${urlObj.pathname}`
+    }
+    return url
+  } catch {
+    return url
+  }
+}
+
+// Helper function to filter out non-SEO URLs
+function isSeoUrl(slug: string): boolean {
+  const nonSeoPaths = [
+    'my-account',
+    'cart',
+    'checkout',
+    'wp-admin',
+    'wp-login',
+    'wp-content',
+    'wp-includes',
+    'api',
+    'dashboard',
+    'preview',
+    'draft'
+  ]
+  return !nonSeoPaths.some(path => slug.includes(path))
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://www.${process.env.NEXT_PUBLIC_FRONTEND || 'bkmower.com'}`
   const sitemapEntries: MetadataRoute.Sitemap = []
 
-  // Add static pages first
+  // Add static pages first (only SEO-relevant ones)
   const staticPages = [
     {
       url: baseUrl,
@@ -121,17 +155,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch and add all posts
   try {
     const postData = await client.request<AllPostsResult>(GET_ALL_POSTS_FOR_SITEMAP)
-    const postUrls = postData.posts.nodes.map((post) => {
-      // Transform slashes if needed (ensuring consistent URL format)
-      const slug = post.slug.endsWith('/') ? post.slug.slice(0, -1) : post.slug
+    const postUrls = postData.posts.nodes
+      .filter(post => isSeoUrl(post.slug))
+      .map((post) => {
+        // Transform slashes if needed (ensuring consistent URL format)
+        const slug = post.slug.endsWith('/') ? post.slug.slice(0, -1) : post.slug
+        const lastModified = post.seo.opengraphModifiedTime ? new Date(post.seo.opengraphModifiedTime) : new Date()
+        
+        // Calculate priority based on post age (newer posts get higher priority)
+        const postAge = Date.now() - lastModified.getTime()
+        const ageInDays = postAge / (1000 * 60 * 60 * 24)
+        const priority = Math.max(0.4, 0.8 - (ageInDays / 365)) // Decrease priority by 0.1 per year, minimum 0.4
 
-      return {
-        url: `${baseUrl}/${slug}`,
-        lastModified: post.seo.opengraphModifiedTime ? new Date(post.seo.opengraphModifiedTime) : new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      }
-    })
+        const entry: MetadataRoute.Sitemap[number] = {
+          url: ensureSameDomain(post.seo.canonical || `${baseUrl}/${slug}`, baseUrl),
+          lastModified,
+          changeFrequency: 'weekly' as const,
+          priority,
+        }
+
+        // Add image information if available
+        if (post.featuredImage?.node?.sourceUrl) {
+          entry.images = [ensureSameDomain(post.featuredImage.node.sourceUrl, baseUrl)]
+        }
+
+        return entry
+      })
 
     sitemapEntries.push(...postUrls)
   } catch (error) {
@@ -141,17 +190,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch and add all categories
   try {
     const categoryData = await client.request<AllCategoriesResult>(GET_ALL_CATEGORIES)
-    const categoryUrls = categoryData.categories.nodes.map((category) => {
-      // Transform slashes if needed
-      const slug = category.slug.endsWith('/') ? category.slug.slice(0, -1) : category.slug
+    const categoryUrls = categoryData.categories.nodes
+      .filter(category => isSeoUrl(category.slug))
+      .map((category) => {
+        // Transform slashes if needed
+        const slug = category.slug.endsWith('/') ? category.slug.slice(0, -1) : category.slug
 
-      return {
-        url: `${baseUrl}/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-      }
-    })
+        return {
+          url: `${baseUrl}/${slug}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        }
+      })
 
     sitemapEntries.push(...categoryUrls)
 
@@ -161,6 +212,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const content = await getContentBySlug(category.slug)
         if (content && content.type === "category" && content.children) {
           for (const subCategory of content.children) {
+            if (!isSeoUrl(subCategory.slug)) continue
+            
             const subSlug = subCategory.slug.endsWith('/') ? subCategory.slug.slice(0, -1) : subCategory.slug
 
             sitemapEntries.push({
@@ -182,17 +235,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch and add all WordPress pages
   try {
     const pageData = await client.request<AllPagesResult>(GET_ALL_PAGES)
-    const pageUrls = pageData.pages.nodes.map((page) => {
-      // Transform slashes if needed
-      const slug = page.slug.endsWith('/') ? page.slug.slice(0, -1) : page.slug
+    const pageUrls = pageData.pages.nodes
+      .filter(page => isSeoUrl(page.slug))
+      .map((page) => {
+        // Transform slashes if needed
+        const slug = page.slug.endsWith('/') ? page.slug.slice(0, -1) : page.slug
+        const lastModified = page.modified ? new Date(page.modified) : new Date()
 
-      return {
-        url: `${baseUrl}/${slug}`,
-        lastModified: page.modified ? new Date(page.modified) : new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.7,
-      }
-    })
+        // Calculate priority based on page importance
+        const priority = slug === 'home' || slug === 'index' ? 1.0 : 0.7
+
+        return {
+          url: `${baseUrl}/${slug}`,
+          lastModified,
+          changeFrequency: 'monthly' as const,
+          priority,
+        }
+      })
 
     sitemapEntries.push(...pageUrls)
   } catch (error) {
@@ -204,11 +263,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     new Map(sitemapEntries.map(item => [item.url, item])).values()
   )
 
-  // Sort entries by priority (highest first) for better crawl efficiency
+  // Sort entries by priority (highest first) and then by lastModified (newest first)
   return uniqueEntries.sort((a, b) => {
     if (a.priority !== undefined && b.priority !== undefined) {
-      return b.priority - a.priority
+      const priorityDiff = b.priority - a.priority
+      if (priorityDiff !== 0) return priorityDiff
     }
-    return 0
+    
+    const aDate = a.lastModified instanceof Date ? a.lastModified : new Date(a.lastModified || '')
+    const bDate = b.lastModified instanceof Date ? b.lastModified : new Date(b.lastModified || '')
+    return bDate.getTime() - aDate.getTime()
   })
 }

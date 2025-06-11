@@ -3,6 +3,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Lato, Noto_Sans } from "next/font/google";
+import { Toaster, toast } from "react-hot-toast";
 
 const noto = Noto_Sans({ weight: "400", subsets: ["latin"] });
 const lato = Lato({ weight: ["100", "300", "400", "700"], subsets: ["latin"] });
@@ -67,14 +68,14 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId, onCommentPosted }) =>
 
       if (response.ok) {
         const comment = await response.json();
-        setSuccess("Comment posted successfully!");
+        toast.success("Comment posted successfully!");
         onCommentPosted(comment); // Notify the parent component
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Failed to post comment.");
       }
     } catch (err) {
-      setError("An error occurred while posting the comment.");
+      toast.error("Failed to post comment.");
     } finally {
       setLoading(false);
     }
@@ -163,6 +164,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId, onCommentPosted }) =>
           </Form>
         )}
       </Formik>
+      <Toaster position="top-right" reverseOrder={true} />
     </>
   );
 };

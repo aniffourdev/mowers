@@ -5,6 +5,10 @@ import Newsletter from "@/app/components/sections/static/Newsletter";
 import Image from "next/image";
 import Link from "next/link";
 import Products from "@/app/components/widgets/Products";
+import localFont from 'next/font/local';
+
+const Parafina = localFont({ src: './fonts/parafina.woff2' })
+
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -71,7 +75,7 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
               Posts in
             </div>
             <h1
-              className={`${poppins.className} text-[26px] text-black font-bold uppercase mt-1`}
+              className={`${Parafina.className} text-3xl text-black font-bold uppercase mt-1`}
             >
               {content.name}
             </h1>

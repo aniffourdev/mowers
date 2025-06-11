@@ -1,13 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { fetchProducts } from "@/api/rest/fetchFunctions";
-import { Product } from "@/libs/interfaces";
-import Image from "next/image";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import React from "react";
 import { Lato } from "next/font/google";
-import Link from "next/link";
-import { Star, StarHalf } from "lucide-react";
 import Ratings from "./Ratings";
 import ProductReviews from "../sections/dynamic/ProductReviews";
 
@@ -27,21 +20,31 @@ const ratingData = {
 
 const ProductList = () => {
   return (
-    <div className="mb-16">
-      <h2
-        className={`!${lato.className} !uppercase text-center lg:text-left !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+    <aside 
+      className="mb-16"
+      aria-label="Product highlights and reviews"
+    >
+      <header>
+        <h2
+          className={`!${lato.className} !uppercase text-center lg:text-left !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+        >
+          Product Highlights
+        </h2>
+      </header>
+      <div 
+        role="complementary"
+        aria-label="Product ratings and reviews"
       >
-        Product Highlights
-      </h2>
-      <Ratings
-        rating={ratingData.rating}
-        reviewCount={ratingData.reviewCount}
-        distribution={ratingData.distribution}
-      />
-      <div className="mt-3">
-        <ProductReviews />
+        <Ratings
+          rating={ratingData.rating}
+          reviewCount={ratingData.reviewCount}
+          distribution={ratingData.distribution}
+        />
+        <div className="mt-3">
+          <ProductReviews />
+        </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

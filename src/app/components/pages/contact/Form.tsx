@@ -1,7 +1,7 @@
 // src/app/components/pages/contact/Form.tsx
 "use client";
 import React from "react";
-import { Lato, Noto_Sans } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Toaster, toast } from "react-hot-toast";
