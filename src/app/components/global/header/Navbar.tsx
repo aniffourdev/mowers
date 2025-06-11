@@ -34,6 +34,7 @@ const Navbar = () => {
       } finally {
         setLoading(false);
       }
+      
     }
 
     fetchMenu();
