@@ -51,7 +51,7 @@ const RecentPosts = async () => {
                 }
                 alt={`Featured image for article: ${post.title}`}
                 title={post.featuredImage?.node.title || post.title}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="50px"
                 className="w-16 h-16"
                 height={50}
                 width={50}

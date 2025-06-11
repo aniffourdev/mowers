@@ -44,7 +44,7 @@ const Homecategory1 = async () => {
             role="list"
             aria-label="Riding lawn mower articles"
           >
-            {postsWithBlurData.map((post) => (
+            {postsWithBlurData.map((post, index) => (
               <article 
                 key={post.slug} 
                 className="mb-10"
@@ -62,11 +62,11 @@ const Homecategory1 = async () => {
                       }
                       alt={`Featured image for article: ${post.title}`}
                       title={post.title}
-                      loading="lazy"
                       width={400}
                       height={300}
-                      objectFit="cover"
                       className="w-full h-[250px] lg:h-[400px] object-cover"
+                      priority={index === 0}
+                      sizes="(max-width: 768px) 100vw, 400px"
                     />
                   </Link>
                 </figure>

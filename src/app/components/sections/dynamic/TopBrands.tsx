@@ -44,7 +44,7 @@ const TopBrands = async () => {
               role="list"
               aria-label="List of lawn mower tips"
             >
-              {postsWithBlurData.map((post) => (
+              {postsWithBlurData.map((post, index) => (
                 <article 
                   key={post.slug} 
                   className="mb-6"
@@ -65,8 +65,8 @@ const TopBrands = async () => {
                         width={400}
                         height={280}
                         className="w-full h-[200px] object-cover"
-                        placeholder="blur"
-                        blurDataURL={post.blurData}
+                        priority={index === 0}
+                        sizes="(max-width: 768px) 100vw, 400px"
                       />
                     </Link>
                   </figure>

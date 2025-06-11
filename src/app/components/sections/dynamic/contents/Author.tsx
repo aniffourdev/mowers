@@ -89,10 +89,11 @@ const Author: React.FC<AuthorProps> = ({ content }) => {
                         }
                         alt={`${post.title}`}
                         title={post.featuredImage?.node?.title || post.title}
-                        loading="lazy"
                         width={400}
                         height={280}
                         className="w-full h-auto"
+                        priority={index === 0}
+                        sizes="(max-width: 768px) 100vw, 400px"
                       />
                     </Link>
                   </figure>

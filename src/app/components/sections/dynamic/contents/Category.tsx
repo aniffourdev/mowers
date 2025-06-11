@@ -81,7 +81,7 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
             </h1>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-7">
-            {content.posts.nodes.map((post) => (
+            {content.posts.nodes.map((post, index) => (
               <article key={post.slug} className="mb-6">
                 <figure className="mb-3">
                   <Link
@@ -95,10 +95,11 @@ const Category: React.FC<CategoryProps> = ({ content }) => {
                       }
                       alt={`${post.title}`}
                       title={post.featuredImage?.node?.title || post.title}
-                      loading="lazy"
                       width={400}
                       height={280}
                       className="w-full h-auto"
+                      priority={index === 0}
+                      sizes="(max-width: 768px) 100vw, 400px"
                     />
                   </Link>
                 </figure>
