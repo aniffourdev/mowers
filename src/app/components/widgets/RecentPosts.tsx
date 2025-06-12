@@ -65,7 +65,7 @@ const RecentPosts = async () => {
               </h4>
               <time
                 dateTime={post.seo.opengraphPublishedTime}
-                className="text-slate-400 text-[10px] uppercase mt-0"
+                className="text-slate-700 text-[10px] uppercase mt-0"
               >
                 {new Date(post.seo.opengraphPublishedTime).toLocaleDateString(
                   "en-US",

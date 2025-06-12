@@ -56,7 +56,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onClose }) => {
   return (
     <div className="max-w-screen-xl mx-auto mt-20">
       <div className="flex justify-end items-end px-5" onClick={onClose}>
-        <IoMdClose className="size-6 text-slate-500 cursor-pointer" />
+        <IoMdClose className="size-6 text-slate-700 cursor-pointer" />
       </div>
       <form
         onSubmit={handleSearchSubmit}
@@ -128,7 +128,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onClose }) => {
                   </figure>
                 ) : (
                   <div className="h-full w-full bg-gray-200 flex items-center justify-center">
-                    <LuSearch className="size-8 text-gray-400" />
+                    <LuSearch className="size-8 text-gray-800" />
                   </div>
                 )}
               </div>
@@ -155,7 +155,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onClose }) => {
                 )}
                 <time
                   dateTime={result.seo.opengraphPublishedTime}
-                  className="text-slate-500 text-[10px] md:text-xs uppercase"
+                  className="text-slate-700 text-[10px] md:text-xs uppercase"
                 >
                   {new Date(
                     result.seo.opengraphPublishedTime

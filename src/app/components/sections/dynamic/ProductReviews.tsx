@@ -73,7 +73,7 @@
 // //                   </Link>
 // //                   <time
 // //                     dateTime={post.seo.opengraphPublishedTime}
-// //                     className="text-slate-500 text-[10px] md:text-xs uppercase"
+// //                     className="text-slate-700 text-[10px] md:text-xs uppercase"
 // //                   >
 // //                     {new Date(
 // //                       post.seo.opengraphPublishedTime
@@ -261,7 +261,7 @@ const ProductList = () => {
                       ({product.meta.rating})
                     </span>
                   </div>
-                  <div className="font-semibold text-sm text-slate-400 line-through">
+                  <div className="font-semibold text-sm text-slate-700 line-through">
                     ${product.meta.regular_price}
                   </div>
                   <div className="font-semibold text-md text-emerald-600">

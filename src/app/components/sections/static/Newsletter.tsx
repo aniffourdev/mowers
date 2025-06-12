@@ -88,7 +88,7 @@ const Newsletter = () => {
               <Field
                 type="email"
                 name="email"
-                className="py-3 w-full border-[1px] px-2 placeholder:text-slate-300 border-slate-200 rounded-none text-slate-500 text-xs outline-none"
+                className="py-3 w-full border-[1px] px-2 placeholder:text-slate-500 border-slate-200 rounded-none text-slate-700 text-xs outline-none"
                 placeholder="Your Email"
               />
               <ErrorMessage name="email" component="div" className="text-red-500 text-xs !mt-1.5" />

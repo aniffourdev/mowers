@@ -65,7 +65,7 @@
 //     <div className="lg:w-9/12">
 //       <div className="mb-10">
 //         <div
-//           className={`${lato.className} uppercase text-slate-400 font-[600] text-xs tracking-widest`}
+//           className={`${lato.className} uppercase text-slate-700 font-[600] text-xs tracking-widest`}
 //         >
 //           Posts in
 //         </div>

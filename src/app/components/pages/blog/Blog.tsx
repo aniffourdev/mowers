@@ -168,7 +168,7 @@ export default function BlogPosts({
                   </Link>
                   <time
                     dateTime={post.seo.opengraphPublishedTime}
-                    className="text-slate-500 text-[10px] md:text-xs uppercase"
+                    className="text-slate-700 text-[10px] md:text-xs uppercase"
                   >
                     {new Date(
                       post.seo.opengraphPublishedTime

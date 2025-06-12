@@ -314,7 +314,7 @@ const RelatedPosts = ({
               </Link>
               <time
                 dateTime={post.seo.opengraphPublishedTime}
-                className="text-slate-500 !text-[10px] md:text-xs uppercase"
+                className="text-slate-700 !text-[10px] md:text-xs uppercase"
               >
                 {new Date(post.seo.opengraphPublishedTime).toLocaleDateString(
                   "en-US",
@@ -550,7 +550,7 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
               />
               {comment.author_name}
             </p>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-700">
               <time dateTime={comment.date} title={new Date(comment.date).toLocaleString()}>
                 {new Date(comment.date).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -562,7 +562,7 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
           </div>
         </footer>
         <p
-          className="text-gray-500 dark:text-gray-400"
+          className="text-gray-500 dark:text-gray-800"
           dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
         />
       </article>
@@ -694,7 +694,7 @@ const MainContent = ({
               Home
             </Link>
           </li>
-          <li className="inline-block text-slate-500 text-sm">/</li>
+          <li className="inline-block text-slate-700 text-sm">/</li>
           {post.categories.nodes.length > 0 && (
             <li className="!${lato.className} !uppercase !text-slate-800 !font-[600] !text-xs !tracking-widest">
               <Link
@@ -705,13 +705,13 @@ const MainContent = ({
               </Link>
             </li>
           )}
-          <li className="inline-block text-slate-500 text-sm">/</li>
+          <li className="inline-block text-slate-700 text-sm">/</li>
         </ol>
       </nav>
       <h1 className="text-2xl lg:text-3xl font-black text-black mt-0">
         {post.title}
       </h1>
-      <p className="text-slate-500 text-sm mt-3 mb-8">{post.seo.metaDesc}</p>
+      <p className="text-slate-700 text-sm mt-3 mb-8">{post.seo.metaDesc}</p>
       <div className="flex justify-start items-center gap-3 mb-8">
         {post.author && (
           <div
@@ -732,7 +732,7 @@ const MainContent = ({
           </p>
           <time
             dateTime={post.seo.opengraphPublishedTime || ""}
-            className="text-slate-500 uppercase text-xs font-medium"
+            className="text-slate-700 uppercase text-xs font-medium"
           >
             Published:{" "}
             <span className="font-semibold">
@@ -761,7 +761,7 @@ const MainContent = ({
             <Link
               key={tag.slug}
               href={`/${tag.slug}`}
-              className="text-slate-400 text-[13px] hover:text-slate-500 transition"
+              className="text-slate-700 text-[13px] hover:text-slate-700 transition"
             >
               #{tag.name}
             </Link>
