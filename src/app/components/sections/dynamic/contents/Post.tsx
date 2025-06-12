@@ -562,7 +562,7 @@ const CommentsList: React.FC<{ comments: Comment[] }> = ({ comments }) => {
           </div>
         </footer>
         <p
-          className="text-gray-500 dark:text-gray-800"
+          className="text-gray-500 dark:text-gray-400"
           dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
         />
       </article>
@@ -721,7 +721,7 @@ const MainContent = ({
           ></div>
         )}
         <div className="flex justify-center items-start flex-col space-y-1">
-          <p className="text-gray-800 text-xs font-medium uppercase">
+          <p className="text-gray-400 text-xs font-medium uppercase">
             BY:{" "}
             <Link
               href="/about"

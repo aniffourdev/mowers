@@ -34,27 +34,38 @@ const Navbar = () => {
       } finally {
         setLoading(false);
       }
-      
     }
 
     fetchMenu();
   }, []);
 
   return (
-    <header className="bg-white/95 py-0.5 border-b-[1px] border-slate-200 sticky top-0 w-full z-40">
-      <div className="max-w-screen-lg flex flex-wrap items-center justify-between mx-auto p-4">
-        <div className="flex justify-start items-center gap-5">
-          <Suspense fallback={<div className="h-screen w-screen flex justify-center items-center">Loading...</div>}>
-            <Mobilemenu menuItems={menuItems} loading={loading} />
+    <>
+      {/* Skip to main content link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      <header 
+        className="bg-white/95 py-0.5 border-b-[1px] border-slate-200 sticky top-0 w-full z-40"
+        role="banner"
+      >
+        <div className="max-w-screen-lg flex flex-wrap items-center justify-between mx-auto p-4">
+          <div className="flex justify-start items-center gap-5">
+            <Suspense fallback={<div className="h-screen w-screen flex justify-center items-center">Loading...</div>}>
+              <Mobilemenu menuItems={menuItems} loading={loading} />
+            </Suspense>
+            <Logo />
+          </div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Menu />
           </Suspense>
-          <Logo />
+          <Calltoaction />
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Menu />
-        </Suspense>
-        <Calltoaction />
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 

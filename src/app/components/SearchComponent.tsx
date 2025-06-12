@@ -128,7 +128,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onClose }) => {
                   </figure>
                 ) : (
                   <div className="h-full w-full bg-gray-200 flex items-center justify-center">
-                    <LuSearch className="size-8 text-gray-800" />
+                    <LuSearch className="size-8 text-gray-400" />
                   </div>
                 )}
               </div>

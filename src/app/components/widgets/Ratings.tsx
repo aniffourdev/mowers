@@ -71,7 +71,7 @@ const Ratings: React.FC<RatingDisplayProps> = ({ rating, reviewCount, distributi
     >
       <div className="flex items-center">
         <span 
-          className={`text-3xl font-black -tracking-[2px] text-gray-800`}
+          className={`text-3xl font-black -tracking-[2px] text-gray-400`}
           aria-label={`${rating.toFixed(1)} out of 5 stars`}
         >
           {rating.toFixed(1)}
