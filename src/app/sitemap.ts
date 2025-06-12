@@ -185,6 +185,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     sitemapEntries.push(...postUrls)
   } catch (error) {
     console.error('Error fetching posts for sitemap:', error)
+    // Do not throw, just skip posts
   }
 
   // Fetch and add all categories
@@ -230,6 +231,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch (error) {
     console.error('Error fetching categories for sitemap:', error)
+    // Do not throw, just skip categories
   }
 
   // Fetch and add all WordPress pages
@@ -256,6 +258,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     sitemapEntries.push(...pageUrls)
   } catch (error) {
     console.error('Error fetching pages for sitemap:', error)
+    // Do not throw, just skip pages
   }
 
   // Deduplicate URLs (in case there are any duplicates)

@@ -130,7 +130,7 @@ const AboutUs = () => {
                 onLoad={() => setImageLoaded(true)}
               />
             </figure>
-            <p className="!text-xs !text-center !mb-2 !text-slate-500 mt-3.5">Follow me on:</p>
+            <p className="!text-xs !text-center !mb-2 !text-slate-800 mt-3.5">Follow me on:</p>
             <nav className="mt-1 mb-10 lg:mb-0">
               <ul className="flex justify-center items-center gap-3">
                 {socialMediaIcons.map(({ name, icon: Icon, link, color }) => (
