@@ -34,7 +34,7 @@ const FeaturedPosts = async () => {
           <div className="lg:w-9/12">
             <header className="flex justify-center items-center flex-col">
               <h2
-                className={`!${lato.className} !pb-[0.3em] !text-center !text-[16px] !tracking-[2px] !uppercase !text-slate-400`}
+                className={`!${lato.className} !pb-[0.3em] !text-center !text-[16px] !tracking-[2px] !uppercase !text-slate-800`}
               >
                 Riding Lawn
               </h2>

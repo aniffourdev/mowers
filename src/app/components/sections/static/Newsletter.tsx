@@ -74,7 +74,7 @@ const Newsletter = () => {
     <>
       <div className="mb-12">
         <h2
-          className={`!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+          className={`!${lato.className} !uppercase !text-slate-800 !font-[600] !text-xs !tracking-widest`}
         >
           Subscribe to newsletter
         </h2>

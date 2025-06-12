@@ -27,7 +27,7 @@ const RecentPosts = async () => {
     >
       <header>
         <h2
-          className={`!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest`}
+          className={`!${lato.className} !uppercase !text-slate-800 !font-[600] !text-xs !tracking-widest`}
         >
           Recent Posts
         </h2>

@@ -26,7 +26,7 @@ const ProductsReview = async () => {
       <div className="max-w-screen-lg mx-auto p-4">
         <div className="flex justify-center items-center flex-col">
           <h2
-            className={`!${lato.className} !pb-[0.3em] !text-center !text-[16px] !tracking-[2px] !uppercase !text-slate-400`}
+            className={`!${lato.className} !pb-[0.3em] !text-center !text-[16px] !tracking-[2px] !uppercase !text-slate-800`}
           >
             Products Review
           </h2>

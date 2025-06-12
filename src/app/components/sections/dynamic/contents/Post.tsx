@@ -689,14 +689,14 @@ const MainContent = ({
     <header>
       <nav aria-label="Breadcrumb" className="mb-2">
         <ol className="flex justify-start items-center gap-1.5">
-          <li className="!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest">
+          <li className="!${lato.className} !uppercase !text-slate-800 !font-[600] !text-xs !tracking-widest">
             <Link href="/" className="uppercase">
               Home
             </Link>
           </li>
           <li className="inline-block text-slate-500 text-sm">/</li>
           {post.categories.nodes.length > 0 && (
-            <li className="!${lato.className} !uppercase !text-slate-400 !font-[600] !text-xs !tracking-widest">
+            <li className="!${lato.className} !uppercase !text-slate-800 !font-[600] !text-xs !tracking-widest">
               <Link
                 href={`/${post.categories.nodes[0].slug}`}
                 className="uppercase"
@@ -825,7 +825,7 @@ const MainContent = ({
       {previousPost && (
         <div className="my-12">
           <h4
-            className={`!${lato.className} !uppercase !text-slate-400 !font-normal !text-xs !tracking-widest`}
+            className={`!${lato.className} !uppercase !text-slate-800 !font-normal !text-xs !tracking-widest`}
           >
             Previous Post
           </h4>
@@ -845,7 +845,7 @@ const MainContent = ({
       {nextPost && (
         <div className="my-12">
           <h4
-            className={`!${lato.className} flex justify-end !uppercase !text-slate-400 !font-normal !text-xs !tracking-widest`}
+            className={`!${lato.className} flex justify-end !uppercase !text-slate-800 !font-normal !text-xs !tracking-widest`}
           >
             Next Post
           </h4>
